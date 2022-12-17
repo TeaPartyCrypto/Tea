@@ -56,11 +56,18 @@ I am currently in the process of introducing the following assets into `TeaParty
 ## Getting Started
 **NOTE** Tea is currently in BETA and the only server avalible is the staging enviorment. In the staging environment there are several **IMPORTANT** differences from the production environment:
 
-1. All of the RPC's are pointing to the following networks (**DO NOT SEND MAINNET CURRENCY**)
+1. All of the RPC's are pointing to the following networks 
+
+(**DO NOT SEND MAINNET CURRENCY**)
+
        * Ethereum: Goerli ([faucet](https://www.alchemy.com/overviews/goerli-faucet))
+
        * Polygon: Mumbai ([faucet](https://faucet.polygon.technology/))
+
        * Solana: Testnet ([faucet](https://solfaucet.com/))
+
        * Celo: Alfajores ([faucet](https://celo.org/developers/faucet))
+
        * MO: Mainnet (Soon to be testnet with faucet) 
 
 1. The watch timeout has been taken down to 300 secconds from 2 hours ( After 300 secconds any pending transaction will fail) 
