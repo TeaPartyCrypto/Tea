@@ -96,7 +96,7 @@ make build
 **Note** That `make debug` is also avalible, this will build the project and then imediatly start serving a local revision. 
 
 
-## Backend Interactions 
+## (Developer) Backend Interactions 
 ### /sell
 
 `/sell` provides an interface for creating new sell requests. It expects an HTTP Post request containing the following JSON schema:
