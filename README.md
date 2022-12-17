@@ -25,7 +25,7 @@ The application interface for <a href="www.teapartycrypto.com">TeaParty</a>
 
 `tea` works by first checking for a local [NKN](https://nkn.org/) wallet, `wallet`, file and begins listing to this address. If this file does not exist, a new account is created for the user. (**NOTE** This file, `wallet`, is very imporant and should be treated as any other wallet or private key. Do not delete, move, or alter this file while you have open or pending trades as your NKN public address is how `party` talks to your `tea` client.)
 
-After starting the NKN connection, `tea` also begins serving the static assets located at `kodata` (our React application) while expoing several API endpoints for the user to interact with `Party` 
+After starting the NKN connection, `tea` also begins serving the static assets located at `kodata` (our React application) while exposing several API endpoints for the user to interact with `Party` 
 
 `tea` is now at your disposal to interact with 🎉`Party`🎉
 
