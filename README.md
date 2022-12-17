@@ -18,10 +18,20 @@ After starting the NKN connection, `tea` also begins serving the static assets l
 
 ### Start `tea` for LOCAL testing
 
-To start `tea` pointing to a local instance (http://localhost:8066) of `Party`:
+To start `tea` pointing to a local instance of `Party`:
 
 ```cmd
 make run
+```
+
+You can now visit `http://localhost:8080` to view the interface.
+
+### Start `tea` for STAGING testing
+
+To start `tea` pointing to the STAGING instance of `Party`:
+
+```cmd
+make staging
 ```
 
 You can now visit `http://localhost:8080` to view the interface.
@@ -36,10 +46,9 @@ make prod
 
 You can now visit `http://localhost:8080` to view the interface.
 
-### Building the Application
+### Build from source
 
-After updating the frontend components found in `/fe`, one can build and bundle the application
-with the following:
+Execute the following to build and bundle the application from source:
 
 ```cmd
 make build
@@ -94,5 +103,29 @@ curl -v "http://localhost:8080/buy" \
        -X POST \
        -H "Content-Type: application/json" \
        -d '{"txid":"30e16ef3-8ada-453d-adee-bafd242cb91", "buyerShippingAddress":"0x53d7818dA5679Ffb3F20FE86ae871D1F691ff409","paymentTransactionID":"0xb1306f77a428f99a01c888d172fc220805d30cfd46185f688eaf768eb1698d61"}'
+```
+
+### /getPrivateKeys
+`/getPrivateKeys` provides an interface for retreving the locally stored Private keys. 
+
+Example curl request:
+```cmd
+curl -v "http://localhost:8080/getPrivateKeys" \
+```
+
+## /deletePK
+`/deletePK` provides an interface for deleting the locally stored keys. 
+
+| Key      | Description | 
+| ----------- | ----------- |
+| address      | The public address of the key to delete. |
+
+
+Example curl request:
+```cmd
+curl -v "http://localhost:8080/buy" \
+       -X POST \
+       -H "Content-Type: application/json" \
+       -d '{"address":"0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3"}'
 ```
 
