@@ -1,16 +1,16 @@
-# tea
+<p align="center">
+<img width="200" src="/teapartybiglogo.png" alt="Material Bread logo">
+<p align="center">
+The application interface for interacting with <a href="www.teapartycrypto.com">TeaParty</a>
+</p>
+</p>
 
-`tea` is a desktop application for interacting with `Party` 
-
-## Overview
-
-`tea` consists of a Golang backend, `/cmd`, and a React frontend, `/fe`. 
 
 ### Design
 
-`tea` was elected to be designed as a desktop application so that we can have a safe, private, secure, delivery method when transferring Private keys.
+`tea` was elected to be designed as a desktop application over a hosted web service in order to provide users with the most control, safety, privacy, and security, while interacting with the marketplace. 
 
-`tea` works by first checking for a local NKN wallet, `wallet`, file and begins listing to this address. If this file does not exist, a new account is created for the user. 
+`tea` works by first checking for a local [NKN](https://nkn.org/) wallet, `wallet`, file and begins listing to this address. If this file does not exist, a new account is created for the user. (**NOTE** This file, `wallet`, is very imporant and should be treated as any other wallet or private key. Do not delete, move, or alter this file while you have open or pending trades) 
 
 After starting the NKN connection, `tea` also begins serving the static assets located at `cmd/kodata` (our React application) while expoing several API endpoints for the user to interact with.  
 
