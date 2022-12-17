@@ -36,6 +36,8 @@ After starting the NKN connection, `tea` also begins serving the static assets l
 
 Please download and configure Docker for your system. (GUI - [download](https://www.docker.com/products/docker-desktop/) CLI - [download](https://docs.docker.com/get-docker/))
 
+If you need help getting started, feel free to join us in the MineOnlium [Discord!](https://discord.gg/4JFjejV4FN) or PM me directly on Discord @ Filth#5858
+
 Here are a few things you can currently do with `tea`:
 
 * Browse the marketplace. 
@@ -96,7 +98,13 @@ make build
 **Note** That `make debug` is also avalible, this will build the project and then imediatly start serving a local revision. 
 
 
-## (Developer) Backend Interactions 
+# Developer 
+
+## Contributing
+
+`tea` is happy to accept contributions from the community! [Submit](https://github.com/TeaPartyCrypto/Tea/pulls) a PR or [Create](https://github.com/TeaPartyCrypto/Tea/issues) an issue!
+
+## Backend Interactions 
 ### /sell
 
 `/sell` provides an interface for creating new sell requests. It expects an HTTP Post request containing the following JSON schema:
