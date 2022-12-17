@@ -3,7 +3,7 @@
 <p align="center">
 <img width="200" src="/teapartybiglogo.png" alt="Material Bread logo">
 <p align="center">
-The application interface for <a href="www.teapartycrypto.com">TeaParty</a>
+The application interface for `TeaParty` (A digital thrift store) 
 </p>
 </p>
 
