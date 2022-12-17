@@ -12,9 +12,9 @@ The application interface for <a href="www.teapartycrypto.com">TeaParty</a>
 
 `TeaParty` consists of two core parts `tea` & `party`, as illustrated by the diagram below. 
 
-* `party` - The backend services and logic that support the platform. This is where all the magic happens 🪄 ( If this sounds complicated, just think of `party` as the 🧠 "brains" 🧠 of the project .) 
+* `party` - A suite of services and logic that support the platform. This is where all the magic happens 🪄 ( If this sounds complicated, just think of `party` as the 🧠 "brains" 🧠 of the project .) 
 
-* `tea` - The frontend services and logic that support 
+* `tea` - A suite of services and logic to make it easy for users to interact with `party` 
 
 <p align="center">
 <img width="200" src="/teadiagram.png" alt="Material Bread logo">
@@ -27,8 +27,7 @@ The application interface for <a href="www.teapartycrypto.com">TeaParty</a>
 
 After starting the NKN connection, `tea` also begins serving the static assets located at `cmd/kodata` (our React application) while expoing several API endpoints for the user to interact with `Party` 
 
-`tea` is now at your disposal! 
-
+`tea` is now at your disposal to interact with 🎉`Party`🥳
 
 ## Getting Started
 
