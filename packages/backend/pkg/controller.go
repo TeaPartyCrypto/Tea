@@ -20,7 +20,6 @@ var once sync.Once
 
 type PKDeleteRequest struct {
 	Address string `json:"address"`
-	Chain   string `json:"chain"`
 }
 
 func (c *Controller) DeletePrivateKey(w http.ResponseWriter, r *http.Request) {
@@ -32,19 +31,37 @@ func (c *Controller) DeletePrivateKey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// delete the private key from the local file system
-	// "data/keys/" + pk.Chain + "-" + pk.Address + ".txt"
-	err = os.Remove("data/keys/" + pkdr.Chain + "-" + pkdr.Address + ".txt")
+	// list the keys in the local file system
+	files, err := ioutil.ReadDir("data/keys")
 	if err != nil {
-		log.Print("error deleting private key: " + err.Error())
+		log.Print("error reading keys directory: " + err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	// return a success message
+	// find the key to delete
+	for _, f := range files {
+		if strings.Contains(f.Name(), pkdr.Address) {
+			// delete the private key from the local file system
+			// "data/keys/" + pk.Chain + "-" + pk.Address + ".txt"
+			err = os.Remove("data/keys/" + f.Name())
+			if err != nil {
+				log.Print("error deleting private key: " + err.Error())
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode("success")
+			return
+		}
+	}
+
+	// return a failure message
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode("success")
+	w.WriteHeader(http.StatusBadRequest)
+	json.NewEncoder(w).Encode("could not find the key to delete")
 }
 
 func (c *Controller) RootHandler(w http.ResponseWriter, r *http.Request) {

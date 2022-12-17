@@ -31,7 +31,7 @@ export default function TeaParty({
   const [txid, setTxid] = useState("");
   const [myNKNAddress, setMyNKNAddress] = useState("");
   const [sellerShippingAddress, setSellerShippingAddress] = useState("0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3");
-  const [sellersPaymentTransactionID, setSellersPaymentTransactionID] = useState("0x9876");
+  const [sellersPaymentTransactionID, setSellersPaymentTransactionID] = useState("");
   const [buyersPaymentTransactionID, setBuyersPaymentTransactionID] = useState("0x1232114");
   const [buyerShippingAddress, setBuyerShippingAddress] = useState("0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3");
   const [buyersRefundAddress, setBuyersRefundAddress] = useState("0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3");
@@ -225,13 +225,12 @@ export default function TeaParty({
       );
   }
 
-  const deletePK = async (privateKey) => {
+  const deletePK = async (address) => {
     axios.post('/deletePK', {
-      privateKey: privateKey
+      address: address
     })
       .then((response) => {
         console.log(response.data);
-        setUserPrivateKeys(response.data);
         if (response.status == 200) {
           alert("Private Key Deleted");
           getPKs();
@@ -380,7 +379,7 @@ export default function TeaParty({
       txid: txid,
       buyerNKNAddress: myNKNAddress,
       buyerShippingAddress: buyerShippingAddress,
-      paymentTransactionID: buyersPaymentTransactionID,
+      paymentTransactionID: address,
       refundAddress: buyersRefundAddress,
       tradeAsset: tradeAsset,
     }).then((response) => {
@@ -415,23 +414,23 @@ export default function TeaParty({
           color: "#023020",
           fontWeight: "bold",
           textAlign: "center",
-          
+
         }}
       >
 
         {/* <img src={returnLogo("burger")} style={{ background: "#023020"}} alt="Tea Party Logo" width="25" height="25" onClick={() => show("nav")} /> 
         {showNav ?  */}
         <div>
-        <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width:200, alignSelf:"center" }} variant="secondary" onClick={() => purchaseTransaction()}> Pay Transaction Fee</Button>
-        {"       "}
-        <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width:200, alignSelf:"center" }} variant="secondary" onClick={() => show("browse") && listOrders()}>Browse</Button>
-        {"       "}
-        <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width:200, alignSelf:"center" }} variant="secondary" onClick={() => show("sell")}>New Trade</Button>
-        {"       "}
-        <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" , width:200, alignSelf:"center"}} variant="secondary" onClick={() => { show("payorder") }}>Pending Pay Orders {" "}
-          <span style={{ color: 'lightgreen' }}>{pendingPayNumberAmmount}</span></Button>
-        {"      "}
-        <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width:200, alignSelf:"center" }} variant="secondary" onClick={() => show("pk")}>Private Keys </Button>
+          <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200, alignSelf: "center" }} variant="secondary" onClick={() => purchaseTransaction()}> Pay Transaction Fee</Button>
+          {"       "}
+          <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200, alignSelf: "center" }} variant="secondary" onClick={() => show("browse") && listOrders()}>Browse</Button>
+          {"       "}
+          <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200, alignSelf: "center" }} variant="secondary" onClick={() => show("sell")}>New Trade</Button>
+          {"       "}
+          <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200, alignSelf: "center" }} variant="secondary" onClick={() => { show("payorder") }}>Pending Pay Orders {" "}
+            <span style={{ color: 'lightgreen' }}>{pendingPayNumberAmmount}</span></Button>
+          {"      "}
+          <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200, alignSelf: "center" }} variant="secondary" onClick={() => show("pk")}>Private Keys </Button>
         </div>
         {/* : null} */}
       </Card>
@@ -492,7 +491,7 @@ export default function TeaParty({
 
                   }}>
                   <h2>
-                    <p style={{ color: "#3EB489" }}>Thank you {address} for participating in the beta release of <span style={{ color: "#3EB489" }}>Tea.</span> </p>
+                    <p style={{ color: "#3EB489" }}>Thank you {address} for participating in the beta release of <span style={{ color: "#3EB489" }}>Tea</span> </p>
                   </h2>
                 </div>
                 <p></p>
@@ -511,9 +510,10 @@ export default function TeaParty({
                   margin: 'auto',
                   backgroundColor: '#282c34',
                   color: '#3EB489',
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
+                  fontSize: '1.2rem'
                 }}>
-                If this is your first time using Tea, have a look below for a quick overview on how to use Tea.
+                If this is your first time using Tea, have a look below for a quick overview on how to use Tea
                 <p></p>
                 <Card
                   style={{
@@ -527,20 +527,21 @@ export default function TeaParty({
                     margin: 'auto',
                     backgroundColor: '#282c34',
                     color: '#3EB489',
-                    fontWeight: 'bold'
+                    fontWeight: 'bold',
+                    fontSize: '1rem'
                   }}>
                   <ul style={{ textAlign: "left" }}>
-                    <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => purchaseTransaction()}> Pay Transaction Fee</Button> Pay for a transaction fee.</li>
+                    <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200 }} variant="secondary" onClick={() => purchaseTransaction()}> Pay Transaction Fee</Button> Pay for a transaction fee.</li>
                     <p></p>
-                    <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => show("browse") && listOrders()}> Browse</Button> View all the current trades avaliable.</li>
+                    <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200 }} variant="secondary" onClick={() => show("browse") && listOrders()}> Browse</Button> View all the current trades avaliable.</li>
                     <p></p>
-                    <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => show("sell")}> New Trade </Button>
+                    <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200 }} variant="secondary" onClick={() => show("sell")}> New Trade </Button>
                       {" "}Create a new trade.</li>
                     <p></p>
-                    <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => { show("payorder") }}> Pending Pay Orders {" "}
+                    <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200 }} variant="secondary" onClick={() => { show("payorder") }}> Pending Pay Orders {" "}
                       <span style={{ color: 'lightgreen' }}>{pendingPayNumberAmmount}</span></Button> Vew all the trades you have initiated and are waiting for payment.</li>
                     <p></p>
-                    <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => show("pk")}>Private Keys </Button>
+                    <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200 }} variant="secondary" onClick={() => show("pk")}>Private Keys </Button>
                       View stored private keys.</li>
                   </ul>
                 </Card>
@@ -758,22 +759,22 @@ export default function TeaParty({
               color: '#3EB489',
               fontWeight: 'bold'
             }}>
-              <Card.Title
-                style={{
-                  marginTop: '1rem',
-                  marginBottom: '1rem',
-                  boarder: 'dark',
-                  padding: '1rem',
-                  width: 'auto',
-                  contentAlign: 'center',
-                  margin: 'auto',
-                  backgroundColor: '#282c34',
-                  color: '#3EB489',
-                  fontWeight: 'bold'
-                }}
-              >
-                Create A New Trade
-              </Card.Title>
+            <Card.Title
+              style={{
+                marginTop: '1rem',
+                marginBottom: '1rem',
+                boarder: 'dark',
+                padding: '1rem',
+                width: 'auto',
+                contentAlign: 'center',
+                margin: 'auto',
+                backgroundColor: '#282c34',
+                color: '#3EB489',
+                fontWeight: 'bold'
+              }}
+            >
+              Create A New Trade
+            </Card.Title>
             <Form
               style={{
                 marginTop: '1rem',
@@ -1085,13 +1086,13 @@ export default function TeaParty({
 
                     }}>
                     <span style={{
-                          color: '#3EB489',
-                          fontWeight: 'bold'
-                        }}> <h3>Chain:</h3>  <img src={returnLogo(account.chain)} alt="Tea Party Logo" width="25" height="25" />  {account.chain} </span>
+                      color: '#3EB489',
+                      fontWeight: 'bold'
+                    }}> <h3>Chain:</h3>  <img src={returnLogo(account.chain)} alt="Tea Party Logo" width="25" height="25" />  {account.chain} </span>
                     <span style={{
-                          color: '#3EB489',
-                          fontWeight: 'bold'
-                        }}> <h3>Address:</h3>
+                      color: '#3EB489',
+                      fontWeight: 'bold'
+                    }}> <h3>Address:</h3>
                       <span
                         style={{
                           color: '#3EB489',
@@ -1099,17 +1100,16 @@ export default function TeaParty({
                         }}>{account.address} </span>
                     </span>
                     <span style={{
-                          color: '#3EB489',
-                          fontWeight: 'bold'
-                        }}> <h3>Private Key:</h3> <span
+                      color: '#3EB489',
+                      fontWeight: 'bold'
+                    }}> <h3>Private Key:</h3> <span
                       style={{
                         color: '#282c34',
                         fontWeight: 'bold'
                       }}>
-                      {account.privateKey}</span>
+                        {account.privateKey}</span>
                       <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => { navigator.clipboard.writeText(account.privateKey) }}>Copy</Button>
-                      <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={(e) => { deletePK(e.target.value) }}>Delete</Button>
-                      {/* TODO: Add a button to delete the private key */}
+                      <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={(e) => { deletePK(account.address) }}>Delete</Button>
                     </span>
                   </Card>
                 )) : <span> No Private Keys</span>}
