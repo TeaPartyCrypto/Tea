@@ -44,6 +44,7 @@ After starting the NKN connection, `tea` also begins serving the static assets l
 
 I am currently in the process of introducing the following assets into `TeaParty`
 
+* NFT's (on all supported chains) 
 * Kaspa
 * Radiant
 * Bitcoin
