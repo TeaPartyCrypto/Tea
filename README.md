@@ -29,7 +29,44 @@ After starting the NKN connection, `tea` also begins serving the static assets l
 
 `tea` is now at your disposal to interact with 🎉`Party`🎉
 
+### Current Supported Assets
+
+`TeaParty` currently supports the trade of the following assets:
+* MineOnlium
+* Ethereum
+* Polygon
+* Celo
+* Solana
+* ANY - ( Users are able to list trades for `ANY` of the supported assets by defining a USD value for the trade) 
+
+
+### Asset Support Comming Soon
+
+I am currently in the process of introducing the following assets into `TeaParty`
+
+* Kaspa
+* Radiant
+* Bitcoin
+* Raven
+* Ergo
+* .... Want `TeaParty` to support something not on the roadmap? [submit](https://github.com/TeaPartyCrypto/Tea/issues) an issue and let me know! 
+
+
 ## Getting Started
+**NOTE** Tea is currently in BETA and the only server avalible is the staging enviorment. In the staging environment there are several **IMPORTANT** differences from the production environment:
+
+1. All of the RPC's are pointing to the following networks (**DO NOT SEND MAINNET CURRENCY**)
+       * Ethereum: Goerli ([faucet](https://www.alchemy.com/overviews/goerli-faucet))
+       * Polygon: Mumbai ([faucet](https://faucet.polygon.technology/))
+       * Solana: Testnet ([faucet](https://solfaucet.com/))
+       * Celo: Alfajores ([faucet](https://celo.org/developers/faucet))
+       * MO: Mainnet (Soon to be testnet with faucet) 
+
+1. The watch timeout has been taken down to 300 secconds from 2 hours ( After 300 secconds any pending transaction will fail) 
+
+1. Currently, users still have to pay for the transaction fees ( I will personally reimburse any and all MO costs incurred while playing on testnet untill the faucet is setup. 
+
+
 ### System Prerequisites for Running `tea`
 
 `tea` is currently distribuited as both a container image and a Linux binary. This path was taken to support a maximum number of runtime environments at launch, however, the packaging will change over time to make it accessable to non Linux/Docker users.
@@ -48,7 +85,6 @@ Here are a few things you can currently do with `tea`:
 
 
 ### Start `tea` from a release
-
 Releases can be downloaded from the releases on the right side of the homepage of this repository on github. Or the most current build is always avalible in the `release` directory. 
 
 Start a release by navigating into the `/release` folder (either within this repo. or via download) and executing the following:
@@ -102,7 +138,14 @@ make build
 
 ## Contributing
 
-`tea` is happy to accept contributions from the community! [Submit](https://github.com/TeaPartyCrypto/Tea/pulls) a PR or [Create](https://github.com/TeaPartyCrypto/Tea/issues) an issue!
+Currently `teaparty` is being devloped solo. So I am more than happy to accept any and all contributions/issues/requests/input from the community! 
+
+Interested? Try:
+
+* [Submiting](https://github.com/TeaPartyCrypto/Tea/pulls) a PR. 
+* [Creating](https://github.com/TeaPartyCrypto/Tea/issues) an issue!
+* Join the MineOnlium [Discord](https://discord.gg/4JFjejV4FN).
+* PM me on Discord @ Filth#5858.
 
 ## Backend Interactions 
 ### /sell
