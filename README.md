@@ -29,14 +29,12 @@ After starting the NKN connection, `tea` also begins serving the static assets l
 
 `tea` is now at your disposal to interact with 🎉`Party`🎉
 
-## System Prerequisites for Running `tea`
+## Getting Started
+### System Prerequisites for Running `tea`
 
 `tea` is currently distribuited as both a container image and a Linux binary. This path was taken to support a maximum number of runtime environments at launch, however, the packaging will change over time to make it accessable to non Linux/Docker users.
 
 Please download and configure Docker for your system. (GUI - [download](https://www.docker.com/products/docker-desktop/) CLI - [download](https://docs.docker.com/get-docker/))
-       
-
-## Getting Started
 
 Here are a few things you can currently do with `tea`:
 
@@ -65,7 +63,7 @@ To start `tea` pointing to a local instance of `Party`:
 make run
 ```
 
-You can now visit `http://localhost:8080` to view the interface.
+You can now visit `http://localhost:8081` to view the interface.
 
 ### Build an run `tea` from source for STAGING testing
 
@@ -75,7 +73,7 @@ To start `tea` pointing to the STAGING instance of `Party`:
 make staging
 ```
 
-You can now visit `http://localhost:8080` to view the interface.
+You can now visit `http://localhost:8081` to view the interface.
 
 ### Build an run `tea` from source for PRODUCTION testing
 
@@ -85,7 +83,7 @@ To start `tea` pointing to the production instance of `Party`:
 make prod
 ```
 
-You can now visit `http://localhost:8080` to view the interface.
+You can now visit `http://localhost:8081` to view the interface.
 
 ### Build and Bundle from Source
 
@@ -100,8 +98,8 @@ make build
 
 ## Backend Interactions 
 ### /sell
-`/sell` provides an interface for creating new sell requests. It expects an HTTP Post request containing the following JSON schema:
 
+`/sell` provides an interface for creating new sell requests. It expects an HTTP Post request containing the following JSON schema:
 
 | Key      | Description | 
 | ----------- | ----------- |
@@ -110,14 +108,14 @@ make build
 | tradeAsset   |   The asset the seller wishes to obtain       |
 | price   | Te quantity of `tradeAsset` the seller wishes to obtain        |
 | sellerShippingAddress   | An address on the `tradeAsset` network that the seller wishes to recieve payment on   |
-| paymentTransactionID   | The Transaction ID proving that 1 MO has been burnt into the `paygate` 
+| paymentTransactionID   | The Users Address on the MO Blockchain that has paid for a `TeaParty` transaction via the smart contract. |
 
 Example curl request:
 ```cmd
-curl -v "http://0.0.0.0:8080/sell" \
+curl -v "http://0.0.0.0:8081/sell" \
        -X POST \
        -H "Content-Type: application/json" \
-       -d '{"currency":"kaspa","amount": 10000 ,"tradeAsset":"kaspa","price":10000, "sellerShippingAddress": "0x53d7818dA5679Ffb3F20FE86ae871D1F691ff409", "paymentTransactionID":"0xaf5a14b68044e743bb78e47794ed6c2719d5e2b254047c7a58d8ef9dcf513bc6"}'
+       -d '{"currency":"kaspa","amount": 10000 ,"tradeAsset":"kaspa","price":10000, "sellerShippingAddress": "kaspa:qqttgqrl38an9r543qnn0g3lywuhsp8cy5e04lfrfsgadnjcdgmsg8zvmjgrj", "paymentTransactionID":"0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3"}'
 ```
 
 ### /list
@@ -125,7 +123,7 @@ curl -v "http://0.0.0.0:8080/sell" \
 
 Example curl request:
 ```cmd 
-curl -v "http://localhost:8080/list" 
+curl -v "http://localhost:8081/list" 
 ```
 
 ### /buy
@@ -136,26 +134,26 @@ curl -v "http://localhost:8080/list"
 | ----------- | ----------- |
 | txid      | A Transaction ID for the order in question.     |
 | buyerShippingAddress      | An address on the `tradeAsset` network that the buyer wishes to recieve payment on.    |
-| paymentTransactionID      |  The Transaction ID proving that 1 MO has been burnt into the `paygate` contract.   |
+| paymentTransactionID      |  The Users Address on the MO Blockchain that has paid for a `TeaParty` transaction via the smart contract.   |
 
 Example curl request:
 ```cmd
-curl -v "http://localhost:8080/buy" \
+curl -v "http://localhost:8081/buy" \
        -X POST \
        -H "Content-Type: application/json" \
-       -d '{"txid":"30e16ef3-8ada-453d-adee-bafd242cb91", "buyerShippingAddress":"0x53d7818dA5679Ffb3F20FE86ae871D1F691ff409","paymentTransactionID":"0xb1306f77a428f99a01c888d172fc220805d30cfd46185f688eaf768eb1698d61"}'
+       -d '{"txid":"30e16ef3-8ada-453d-adee-bafd242cb91", "buyerShippingAddress":"0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3","paymentTransactionID":"0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3"}'
 ```
 
 ### /getPrivateKeys
-`/getPrivateKeys` provides an interface for retreving the locally stored Private keys. 
+`/getPrivateKeys` provides an interface for retreving the locally stored Private keys. It expects an HTTP Get request. 
 
 Example curl request:
 ```cmd
-curl -v "http://localhost:8080/getPrivateKeys" \
+curl -v "http://localhost:8081/getPrivateKeys" \
 ```
 
 ## /deletePK
-`/deletePK` provides an interface for deleting the locally stored keys. 
+`/deletePK` provides an interface for deleting the locally stored keys. It expects an HTTP Post request containing the following JSON schema:
 
 | Key      | Description | 
 | ----------- | ----------- |
@@ -164,7 +162,7 @@ curl -v "http://localhost:8080/getPrivateKeys" \
 
 Example curl request:
 ```cmd
-curl -v "http://localhost:8080/buy" \
+curl -v "http://localhost:8081/buy" \
        -X POST \
        -H "Content-Type: application/json" \
        -d '{"address":"0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3"}'
