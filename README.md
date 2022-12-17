@@ -1,3 +1,5 @@
+# tea
+
 <p align="center">
 <img width="200" src="/teapartybiglogo.png" alt="Material Bread logo">
 <p align="center">
@@ -6,15 +8,29 @@ The application interface for interacting with <a href="www.teapartycrypto.com">
 </p>
 
 
-### Design
+## Design
 
-`tea` was elected to be designed as a desktop application over a hosted web service in order to provide users with the most control, safety, privacy, and security, while interacting with the marketplace. 
+`TeaParty` operates 
 
-`tea` works by first checking for a local [NKN](https://nkn.org/) wallet, `wallet`, file and begins listing to this address. If this file does not exist, a new account is created for the user. (**NOTE** This file, `wallet`, is very imporant and should be treated as any other wallet or private key. Do not delete, move, or alter this file while you have open or pending trades) 
+`tea` was elected to be designed as a desktop application over a hosted web service in order to provide users with the most control, safety, privacy, and security, while interacting with the marketplace. (**Note** Although `tea` is packaged as a desktop application, it does not have to run on your local desktop! In fact it is quite happy living on a remote server.)
 
-After starting the NKN connection, `tea` also begins serving the static assets located at `cmd/kodata` (our React application) while expoing several API endpoints for the user to interact with.  
+`tea` works by first checking for a local [NKN](https://nkn.org/) wallet, `wallet`, file and begins listing to this address. If this file does not exist, a new account is created for the user. (**NOTE** This file, `wallet`, is very imporant and should be treated as any other wallet or private key. Do not delete, move, or alter this file while you have open or pending trades as your NKN public address is how `party` talks to your `tea` client.)
+
+After starting the NKN connection, `tea` also begins serving the static assets located at `cmd/kodata` (our React application) while expoing several API endpoints for the user to interact with `Party` 
+
+`tea` is now at your disposal! 
+
 
 ## Getting Started
+
+Here are a few things you can currently do with `tea`:
+
+* Browse the marketplace. 
+* Create new orders. 
+* View acquired Private Keys.
+* Remove acquired Private Keys from the local filesystem. 
+* Interact with the `TeaParty` smart contract to pay for transaction fees, currently set @ 1 MO/ Transaction. ( **NOTE:** ALL MO Accounts with a balance over 17k have FREE access to Buy and Sell with `TeaParty`) 
+
 
 ### Start `tea` from a release
 
