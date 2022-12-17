@@ -158,7 +158,7 @@ Interested? Try:
 | currency      | The asset the seller wishes to post for trade       |
 | amount   | The quantity of `currency` the seller wishes to trade        |
 | tradeAsset   |   The asset the seller wishes to obtain       |
-| price   | Te quantity of `tradeAsset` the seller wishes to obtain        |
+| price   | The quantity of `tradeAsset` the seller wishes to obtain        |
 | sellerShippingAddress   | An address on the `tradeAsset` network that the seller wishes to recieve payment on   |
 | paymentTransactionID   | The Users Address on the MO Blockchain that has paid for a `TeaParty` transaction via the smart contract. |
 
