@@ -9,6 +9,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     environment:
+      # This points to TeaParty Staging enviorment. Prod is not currently avalible. 
       SAAS_ADDRESS: http://10.1.243.98:8080
     ports:
     - 8081:8081
