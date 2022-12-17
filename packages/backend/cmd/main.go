@@ -84,6 +84,7 @@ func main() {
 	http.HandleFunc("/buy", c.Buy)
 	http.HandleFunc("/getNKNAddress", c.GetNKNAddress)
 	http.HandleFunc("/getPrivateKeys", c.GetPrivateKeys)
+	http.HandleFunc("/deletePrivateKey", c.DeletePrivateKey)
 	http.HandleFunc("/fetchopenorderbynkn", c.FetchOpenOrderByNKN)
 	http.HandleFunc("/ws", c.SocketHandler)
 

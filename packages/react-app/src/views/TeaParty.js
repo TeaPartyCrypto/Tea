@@ -11,18 +11,19 @@ import polygonLogo from './logo/matic.png';
 import rxdLogo from './logo/rxd.png';
 import solLogo from './logo/sol.png';
 import teaPartyLogo from './logo/teaparty.png';
+import burgerLogo from './logo/burgler.png';
 
 
 export default function TeaParty({
-    purpose,
-    address,
-    mainnetProvider,
-    localProvider,
-    yourLocalBalance,
-    tx,
-    readContracts,
-    writeContracts,
-  }) {
+  purpose,
+  address,
+  mainnetProvider,
+  localProvider,
+  yourLocalBalance,
+  tx,
+  readContracts,
+  writeContracts,
+}) {
   const [tradeAsset, setTradeAsset] = useState("mineonlium");
   const [amount, setAmount] = useState("1.2");
   const [currency, setCurrency] = useState("polygon");
@@ -51,6 +52,7 @@ export default function TeaParty({
   const [showBrowseOrders, setShowBrowseOrders] = useState(false);
   const [showPendingPayOrders, setshowPendingPayOrders] = useState(false);
   const [showHomePage, setShowHomePage] = useState(true);
+  const [showNav, setShowNav] = useState(true);
   const [sortBy, setSortBy] = useState("mineonlium")
 
   const [waitingToReconnect, setWaitingToReconnect] = useState(null);
@@ -81,6 +83,8 @@ export default function TeaParty({
         return rxdLogo;
       case "solana":
         return solLogo;
+      case "burger":
+        return burgerLogo;
       default:
         return teaPartyLogo;
     }
@@ -88,29 +92,29 @@ export default function TeaParty({
 
   const purchaseTransaction = async () => {
     const result = tx(
-        writeContracts.TeaParty.purchaseTransaction({
-          value: web3.utils.toWei("1", "ether"),
-        }),
-        update => {
-          console.log("📡 Transaction Update:", update);
-          if (update && (update.status === "confirmed" || update.status === 1)) {
-            console.log(" 🍾 Transaction " + update.hash + " finished!");
-            console.log( update.data);
-            alert(web3.utils.hexToNumber(update.data));
-            console.log(
-              " ⛽️ " +
-                update.gasUsed +
-                "/" +
-                (update.gasLimit || update.gas) +
-                " @ " +
-                parseFloat(update.gasPrice) / 1000000000 +
-                " gwei",
-            );
-          }
-        },
-      );
-      console.log("awaiting metamask/web3 confirm result...", result);
-    
+      writeContracts.TeaParty.purchaseTransaction({
+        value: web3.utils.toWei("1", "ether"),
+      }),
+      update => {
+        console.log("📡 Transaction Update:", update);
+        if (update && (update.status === "confirmed" || update.status === 1)) {
+          console.log(" 🍾 Transaction " + update.hash + " finished!");
+          console.log(update.data);
+          alert(web3.utils.hexToNumber(update.data));
+          console.log(
+            " ⛽️ " +
+            update.gasUsed +
+            "/" +
+            (update.gasLimit || update.gas) +
+            " @ " +
+            parseFloat(update.gasPrice) / 1000000000 +
+            " gwei",
+          );
+        }
+      },
+    );
+    console.log("awaiting metamask/web3 confirm result...", result);
+
   }
 
 
@@ -207,7 +211,7 @@ export default function TeaParty({
     }
   }, [waitingToReconnect]);
 
-  // fetchPK is called to fetch the locally stored private keys from the local enviorment
+  // getPKs is called to fetch the locally stored private keys from the local enviorment
   const getPKs = async () => {
     axios.get('/getPrivateKeys')
       .then((response) => {
@@ -220,6 +224,26 @@ export default function TeaParty({
       }
       );
   }
+
+  const deletePK = async (privateKey) => {
+    axios.post('/deletePK', {
+      privateKey: privateKey
+    })
+      .then((response) => {
+        console.log(response.data);
+        setUserPrivateKeys(response.data);
+        if (response.status == 200) {
+          alert("Private Key Deleted");
+          getPKs();
+          return
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      }
+      );
+  }
+
 
   // /fetchopenorderbynkn
   // const fetchOpenOrderByNKN = async () => {
@@ -336,6 +360,8 @@ export default function TeaParty({
         setShowPrivateKeys(false);
         setShowHomePage(true);
         return
+      case "nav":
+        setShowNav(!showNav);
     }
   }
 
@@ -364,11 +390,11 @@ export default function TeaParty({
   }
 
   return (
-    <div className="App" 
-    style={{
-      backgroundColor: "#282c34",
-      paddingTop: "2rem",
-    }}>
+    <div className="App"
+      style={{
+        backgroundColor: "#282c34",
+        paddingTop: "2rem",
+      }}>
       <h1>
         <span
           style={{
@@ -379,7 +405,7 @@ export default function TeaParty({
       </h1>
       <Card
         style={{
-          width: 'auto',
+          width: "auto",
           margin: 'auto',
           marginTop: '2rem',
           marginBottom: '2rem',
@@ -387,21 +413,27 @@ export default function TeaParty({
           border: 'dark',
           backgroundColor: "#3EB489",
           color: "#023020",
-          fontWeight: "bold"
+          fontWeight: "bold",
+          textAlign: "center",
+          
         }}
       >
 
-          <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => purchaseTransaction()}> Pay Transaction Fee</Button> 
-            {"       "}
-            <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => show("browse") && listOrders()}>Browse</Button>
-            {"       "}
-            <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => show("sell")}>New Trade</Button>
-            {"       "}
-            <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => { show("payorder") }}>Pending Pay Orders {" "}
-              <span style={{ color: 'lightgreen' }}>{pendingPayNumberAmmount}</span></Button>
-              {"      "}
-            <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => show("pk")}>Private Keys </Button>
-
+        {/* <img src={returnLogo("burger")} style={{ background: "#023020"}} alt="Tea Party Logo" width="25" height="25" onClick={() => show("nav")} /> 
+        {showNav ?  */}
+        <div>
+        <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width:200, alignSelf:"center" }} variant="secondary" onClick={() => purchaseTransaction()}> Pay Transaction Fee</Button>
+        {"       "}
+        <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width:200, alignSelf:"center" }} variant="secondary" onClick={() => show("browse") && listOrders()}>Browse</Button>
+        {"       "}
+        <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width:200, alignSelf:"center" }} variant="secondary" onClick={() => show("sell")}>New Trade</Button>
+        {"       "}
+        <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" , width:200, alignSelf:"center"}} variant="secondary" onClick={() => { show("payorder") }}>Pending Pay Orders {" "}
+          <span style={{ color: 'lightgreen' }}>{pendingPayNumberAmmount}</span></Button>
+        {"      "}
+        <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width:200, alignSelf:"center" }} variant="secondary" onClick={() => show("pk")}>Private Keys </Button>
+        </div>
+        {/* : null} */}
       </Card>
 
       <Card
@@ -498,7 +530,7 @@ export default function TeaParty({
                     fontWeight: 'bold'
                   }}>
                   <ul style={{ textAlign: "left" }}>
-                  <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => purchaseTransaction()}> Pay Transaction Fee</Button> Pay for a transaction fee.</li>
+                    <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => purchaseTransaction()}> Pay Transaction Fee</Button> Pay for a transaction fee.</li>
                     <p></p>
                     <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => show("browse") && listOrders()}> Browse</Button> View all the current trades avaliable.</li>
                     <p></p>
@@ -712,7 +744,36 @@ export default function TeaParty({
         </Card.Body >
         {/* Sell Order */}
         {showBuyOrder ?
-          <Card.Body>
+
+          <Card.Body
+            style={{
+              marginTop: '1rem',
+              marginBottom: '1rem',
+              boarder: 'dark',
+              padding: '1rem',
+              width: 'auto',
+              contentAlign: 'center',
+              margin: 'auto',
+              backgroundColor: '#282c34',
+              color: '#3EB489',
+              fontWeight: 'bold'
+            }}>
+              <Card.Title
+                style={{
+                  marginTop: '1rem',
+                  marginBottom: '1rem',
+                  boarder: 'dark',
+                  padding: '1rem',
+                  width: 'auto',
+                  contentAlign: 'center',
+                  margin: 'auto',
+                  backgroundColor: '#282c34',
+                  color: '#3EB489',
+                  fontWeight: 'bold'
+                }}
+              >
+                Create A New Trade
+              </Card.Title>
             <Form
               style={{
                 marginTop: '1rem',
@@ -724,7 +785,7 @@ export default function TeaParty({
                 margin: 'auto',
                 backgroundColor: '#282c34',
                 color: '#3EB489',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
               }}>
               <Form.Group controlId="formListOrder">
                 <Row>
@@ -735,7 +796,7 @@ export default function TeaParty({
                       boarder: 'dark',
                       padding: '1rem',
                       width: 'auto',
-                      contentAlign: 'left',
+                      textAlign: 'right',
                       margin: 'auto',
                     }}>
                     Currency
@@ -747,8 +808,8 @@ export default function TeaParty({
                       boarder: 'dark',
                       padding: '1rem',
                       width: 'auto',
-                      contentAlign: 'left',
-                      margin: 'auto'
+                      margin: 'auto',
+                      textAlign: 'left'
                     }}>
                     <Dropdown>
                       <Dropdown.Toggle style={{ backgroundColor: "#023020", color: "#3EB489" }} variant="secondary" id="dropdown-basic">
@@ -776,7 +837,7 @@ export default function TeaParty({
                       boarder: 'dark',
                       padding: '1rem',
                       width: 'auto',
-                      contentAlign: 'left',
+                      textAlign: 'right',
                       margin: 'auto'
                     }}>
                     <Form.Label>Amount</Form.Label>
@@ -788,10 +849,10 @@ export default function TeaParty({
                       boarder: 'dark',
                       padding: '1rem',
                       width: 'auto',
-                      contentAlign: 'left',
+                      textAlign: 'left',
                       margin: 'auto'
                     }}>
-                    <Form.Control style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="1" onChange={(e) => setAmount(e.target.value)} />
+                    <Form.Control style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="" onChange={(e) => setAmount(e.target.value)} />
                   </Col>
                 </Row>
               </Form.Group>
@@ -804,7 +865,7 @@ export default function TeaParty({
                       boarder: 'dark',
                       padding: '1rem',
                       width: 'auto',
-                      contentAlign: 'left',
+                      textAlign: 'right',
                       margin: 'auto'
                     }}>
                     <Form.Label>Pair</Form.Label>
@@ -816,7 +877,7 @@ export default function TeaParty({
                       boarder: 'dark',
                       padding: '1rem',
                       width: 'auto',
-                      contentAlign: 'left',
+                      textAlign: 'left',
                       margin: 'auto'
                     }}>
                     <Dropdown
@@ -848,7 +909,7 @@ export default function TeaParty({
                       boarder: 'dark',
                       padding: '1rem',
                       width: 'auto',
-                      contentAlign: 'left',
+                      textAlign: 'right',
                       margin: 'auto'
                     }}>
                     <Form.Label>{tradeAsset === "ANY" ? "Price / USD" : "Amount"} </Form.Label>
@@ -860,10 +921,10 @@ export default function TeaParty({
                       boarder: 'dark',
                       padding: '1rem',
                       width: 'auto',
-                      contentAlign: 'left',
+                      textAlign: 'right',
                       margin: 'auto'
                     }}>
-                    <Form.Control style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="2" onChange={(e) => setPrice(e.target.value)} />
+                    <Form.Control style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="" onChange={(e) => setPrice(e.target.value)} />
                   </Col>
                 </Row>
               </Form.Group>
@@ -876,7 +937,7 @@ export default function TeaParty({
                       boarder: 'dark',
                       padding: '1rem',
                       width: 'auto',
-                      contentAlign: 'left',
+                      textAlign: 'right',
                       margin: 'auto'
                     }}>
                     <Form.Label>Shipping Address</Form.Label>
@@ -888,42 +949,14 @@ export default function TeaParty({
                       boarder: 'dark',
                       padding: '1rem',
                       width: 'auto',
-                      contentAlign: 'left',
+                      textAlign: 'left',
                       margin: 'auto'
                     }}>
-                    <Form.Control style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3" onChange={(e) => setSellerShippingAddress(e.target.value)} />
+                    <Form.Control style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="" onChange={(e) => setSellerShippingAddress(e.target.value)} />
                   </Col>
                 </Row>
               </Form.Group>
-              <Form.Group controlId="formTransactionID">
-                {/* <Row> */}
-                  {/* <Col
-                    style={{
-                      marginTop: '1rem',
-                      marginBottom: '1rem',
-                      boarder: 'dark',
-                      padding: '1rem',
-                      width: 'auto',
-                      contentAlign: 'left',
-                      margin: 'auto'
-                    }}>
-                    <Form.Label>Fee Payment Transaction ID</Form.Label>
-                  </Col>
-                  <Col
-                    style={{
-                      marginTop: '1rem',
-                      marginBottom: '1rem',
-                      boarder: 'dark',
-                      padding: '1rem',
-                      width: 'auto',
-                      contentAlign: 'left',
-                      margin: 'auto'
-                    }}>
-                    <Form.Control style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="0x1234567890" onChange={(e) => setSellersPaymentTransactionID(e.target.value)} />
-                  </Col> */}
-                {/* </Row> */}
-              </Form.Group>
-              <Form.Group controlId="formTransactionID">
+              <Form.Group controlId="returnShippingAddress">
                 <Row>
                   <Col
                     style={{
@@ -932,7 +965,7 @@ export default function TeaParty({
                       boarder: 'dark',
                       padding: '1rem',
                       width: 'auto',
-                      contentAlign: 'left',
+                      textAlign: 'right',
                       margin: 'auto'
                     }}>
                     <Form.Label>Return Shipping Address</Form.Label>
@@ -947,7 +980,7 @@ export default function TeaParty({
                       contentAlign: 'left',
                       margin: 'auto'
                     }}>
-                    <Form.Control style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="0x1234567890" onChange={(e) => setSellersRefundAddress(e.target.value)} />
+                    <Form.Control style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="" onChange={(e) => setSellersRefundAddress(e.target.value)} />
                   </Col>
                 </Row>
               </Form.Group>
@@ -1045,25 +1078,37 @@ export default function TeaParty({
                       border: '1px solid black',
                       padding: '1rem',
                       borderRadius: '5px',
+                      color: '#282c34',
                       backgroundColor: '#282c34',
                       border: 'dark',
                       borderColor: '#3EB489',
+
                     }}>
-                    <span> <h3>Chain:</h3>  <img src={returnLogo(account.chain)} alt="Tea Party Logo" width="25" height="25" />  {account.chain} </span>
-                    <span> <h3>Address:</h3>
+                    <span style={{
+                          color: '#3EB489',
+                          fontWeight: 'bold'
+                        }}> <h3>Chain:</h3>  <img src={returnLogo(account.chain)} alt="Tea Party Logo" width="25" height="25" />  {account.chain} </span>
+                    <span style={{
+                          color: '#3EB489',
+                          fontWeight: 'bold'
+                        }}> <h3>Address:</h3>
                       <span
                         style={{
                           color: '#3EB489',
                           fontWeight: 'bold'
                         }}>{account.address} </span>
                     </span>
-                    <span> <h3>Private Key:</h3> <span
+                    <span style={{
+                          color: '#3EB489',
+                          fontWeight: 'bold'
+                        }}> <h3>Private Key:</h3> <span
                       style={{
                         color: '#282c34',
                         fontWeight: 'bold'
                       }}>
                       {account.privateKey}</span>
                       <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={() => { navigator.clipboard.writeText(account.privateKey) }}>Copy</Button>
+                      <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={(e) => { deletePK(e.target.value) }}>Delete</Button>
                       {/* TODO: Add a button to delete the private key */}
                     </span>
                   </Card>

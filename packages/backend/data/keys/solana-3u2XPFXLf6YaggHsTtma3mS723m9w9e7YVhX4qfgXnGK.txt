@@ -1,1 +1,0 @@
-{"address":"3u2XPFXLf6YaggHsTtma3mS723m9w9e7YVhX4qfgXnGK","amount":"","network":"","privateKey":"4SDVcj9rXBbSToYhQYT1mCiT6vGL9HknP9rDWWAEBxZFQWWp8Yk6GQpGjTRiYrNdqEVM2ZMbNZWhzpVkEH9xnKHD","chain":"solana","error":""}

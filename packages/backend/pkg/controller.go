@@ -18,6 +18,35 @@ import (
 
 var once sync.Once
 
+type PKDeleteRequest struct {
+	Address string `json:"address"`
+	Chain   string `json:"chain"`
+}
+
+func (c *Controller) DeletePrivateKey(w http.ResponseWriter, r *http.Request) {
+	pkdr := &PKDeleteRequest{}
+	err := json.NewDecoder(r.Body).Decode(pkdr)
+	if err != nil {
+		log.Print("error decoding pk delete request: " + err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// delete the private key from the local file system
+	// "data/keys/" + pk.Chain + "-" + pk.Address + ".txt"
+	err = os.Remove("data/keys/" + pkdr.Chain + "-" + pkdr.Address + ".txt")
+	if err != nil {
+		log.Print("error deleting private key: " + err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// return a success message
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode("success")
+}
+
 func (c *Controller) RootHandler(w http.ResponseWriter, r *http.Request) {
 	once.Do(func() {
 		kdp := path.Join(os.Getenv("KO_DATA_PATH"))
