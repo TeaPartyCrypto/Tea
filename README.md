@@ -31,7 +31,9 @@ After starting the NKN connection, `tea` also begins serving the static assets l
 
 ## System Prerequisites for Running `tea`
 
-* Docker (GUI - [download](https://www.docker.com/products/docker-desktop/) (CLI - [download](https://docs.docker.com/get-docker/))
+`tea` is currently distribuited as both a container image and a Linux binary. This path was taken to support a maximum number of runtime environments at launch, however, the packaging will change over time to make it accessable to non Linux/Docker users.
+
+Please download and configure Docker for your system. (GUI - [download](https://www.docker.com/products/docker-desktop/) CLI - [download](https://docs.docker.com/get-docker/))
        
 
 ## Getting Started
