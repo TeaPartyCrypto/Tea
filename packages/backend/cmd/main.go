@@ -8,6 +8,8 @@ import (
 
 	nkn "github.com/nknorg/nkn-sdk-go"
 
+	"go.uber.org/zap"
+
 	controller "github.com/TeaParty/Tea/packages/backend/pkg"
 )
 
@@ -78,6 +80,15 @@ func main() {
 	c.NKNClient = toClient
 	c.SAASAddress = os.Getenv("SAAS_ADDRESS")
 
+	// create a new sugard logger
+	c.Log, err = zap.NewProduction()
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	go c.StartNKNConnection()
+
 	http.HandleFunc("/", c.RootHandler)
 	http.HandleFunc("/sell", c.Sell)
 	http.HandleFunc("/list", c.ListOrders)
@@ -85,11 +96,8 @@ func main() {
 	http.HandleFunc("/getNKNAddress", c.GetNKNAddress)
 	http.HandleFunc("/getPrivateKeys", c.GetPrivateKeys)
 	http.HandleFunc("/deletePK", c.DeletePrivateKey)
-	http.HandleFunc("/fetchopenorderbynkn", c.FetchOpenOrderByNKN)
+	// http.HandleFunc("/fetchopenorderbynkn", c.FetchOpenOrderByNKN)
 	http.HandleFunc("/ws", c.SocketHandler)
-
-	go c.StartNKNConnection()
-
 	log.Println("Listening on :8081")
 	http.ListenAndServe(":8081", nil)
 

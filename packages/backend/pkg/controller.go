@@ -14,6 +14,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+
+	"go.uber.org/zap"
 )
 
 var once sync.Once
@@ -26,7 +28,7 @@ func (c *Controller) DeletePrivateKey(w http.ResponseWriter, r *http.Request) {
 	pkdr := &PKDeleteRequest{}
 	err := json.NewDecoder(r.Body).Decode(pkdr)
 	if err != nil {
-		log.Print("error decoding pk delete request: " + err.Error())
+		c.Log.Error("error decoding pk delete request", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -34,7 +36,7 @@ func (c *Controller) DeletePrivateKey(w http.ResponseWriter, r *http.Request) {
 	// list the keys in the local file system
 	files, err := ioutil.ReadDir("data/keys")
 	if err != nil {
-		log.Print("error reading keys directory: " + err.Error())
+		c.Log.Error("error reading keys directory", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -46,7 +48,7 @@ func (c *Controller) DeletePrivateKey(w http.ResponseWriter, r *http.Request) {
 			// "data/keys/" + pk.Chain + "-" + pk.Address + ".txt"
 			err = os.Remove("data/keys/" + f.Name())
 			if err != nil {
-				log.Print("error deleting private key: " + err.Error())
+				c.Log.Error("error deleting private key", zap.Error(err))
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -58,7 +60,7 @@ func (c *Controller) DeletePrivateKey(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// return a failure message
+	c.Log.Error("could not find the key to delete for address", zap.String("address", pkdr.Address))
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusBadRequest)
 	json.NewEncoder(w).Encode("could not find the key to delete")
@@ -72,6 +74,7 @@ func (c *Controller) RootHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		c.rootHandler = http.FileServer(http.Dir(kdp))
 	})
+
 	c.rootHandler.ServeHTTP(w, r)
 }
 
@@ -86,7 +89,7 @@ var upgrader = websocket.Upgrader{
 func (c *Controller) SocketHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Print("Error during connection upgradation:", err)
+		c.Log.Error("error during WS connection upgradation", zap.Error(err))
 		return
 	}
 
@@ -98,13 +101,12 @@ func (c *Controller) SocketHandler(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) Sell(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	fmt.Printf("Sell Order Received: %+v", r.Body)
-	// parse the request body into a sell order
+	c.Log.Debug("received sell order")
+
 	sellOrder := &SellOrder{}
 	err := json.NewDecoder(r.Body).Decode(sellOrder)
 	if err != nil {
-		// c.logger.Error("error decoding sell order: " + err.Error())
-		fmt.Printf("error decoding sell order: " + err.Error())
+		c.Log.Error("error decoding sell order", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -112,8 +114,9 @@ func (c *Controller) Sell(w http.ResponseWriter, r *http.Request) {
 	// TODO: verify that sellOrder.Amount != nil
 	// verify that all fields are not empty
 	if sellOrder.Currency == "" || sellOrder.TradeAsset == "" {
-		fmt.Printf("error: currency or trade asset is empty")
-		json.NewEncoder(w).Encode("invalid sell order")
+		c.Log.Error("error: currency or trade asset is empty on sell order ID " + sellOrder.TXID)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("invalid sell order, currency or trade asset is empty")
 		return
 	}
 
@@ -124,7 +127,8 @@ func (c *Controller) Sell(w http.ResponseWriter, r *http.Request) {
 	// prepare sellOrder to send in the http request
 	sellOrderJSON, err := json.Marshal(sellOrder)
 	if err != nil {
-		fmt.Printf("error marshalling sell order: " + err.Error())
+		c.Log.Error("error marshalling sell order", zap.Error(err))
+		w.WriteHeader(http.StatusBadRequest)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -132,7 +136,7 @@ func (c *Controller) Sell(w http.ResponseWriter, r *http.Request) {
 	io := bytes.NewBuffer(sellOrderJSON)
 	req, err := http.NewRequest("POST", c.SAASAddress+"/sell", io)
 	if err != nil {
-		fmt.Printf("error creating http request: " + err.Error())
+		c.Log.Error("error creating http request", zap.Error(err))
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("error creating http request")
 		return
@@ -142,28 +146,26 @@ func (c *Controller) Sell(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Printf("error sending sell order to SAAS: " + err.Error())
+		c.Log.Error("error sending sell order to Party", zap.Error(err))
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error sending sell order to SAAS")
+		json.NewEncoder(w).Encode("error sending sell order to Party")
 		return
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("response Status:", resp.Status)
-	fmt.Println("response Headers:", resp.Header)
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Printf("error reading response body: " + err.Error())
+		c.Log.Error("error reading response body from Party", zap.Error(err))
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error: something bad happend.. please check the logs")
+		json.NewEncoder(w).Encode("error reading response body from Party")
 		return
 	}
 
-	fmt.Println("response Body:", string(body))
 	if resp.StatusCode != 202 {
-		fmt.Printf("error: status code is not 202")
+		c.Log.Error("error: status code is not 202")
+		c.Log.Info("response body from Party: ", zap.String("body", string(body)))
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error: something bad happend.. please check the logs")
+		json.NewEncoder(w).Encode("error: resposne code from Party was not a 202.. Please check tea's backend service logs for more information. Response from Party was: " + string(body))
 		return
 	}
 
@@ -177,11 +179,12 @@ func (c *Controller) ListOrders(w http.ResponseWriter, r *http.Request) {
 	// http get request to the SAAS to get all the orders
 	resp, err := http.Get(c.SAASAddress + "/listorders")
 	if err != nil {
-		fmt.Printf("error: status code is not 202")
+		c.Log.Error("error getting orders from Party", zap.Error(err))
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error: something bad happend.. please check the logs")
+		json.NewEncoder(w).Encode("fetching orders from Party failed. Please check tea's backend service logs for more information. Error from Party request: " + err.Error())
 	}
 	defer resp.Body.Close()
+
 	var orders []SellOrder
 	json.NewDecoder(resp.Body).Decode(&orders)
 	if orders == nil {
@@ -196,22 +199,20 @@ func (c *Controller) ListOrders(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) Buy(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	fmt.Printf("Buy Order Received: %+v", r.Body)
-	// parse the request body into a buy order
 	buyOrder := &BuyOrder{}
 	err := json.NewDecoder(r.Body).Decode(buyOrder)
 	if err != nil {
-		// c.logger.Error("error decoding buy order: " + err.Error())
-		fmt.Printf("error decoding buy order: " + err.Error())
+		c.Log.Error("error decoding buy order", zap.Error(err))
+		w.WriteHeader(http.StatusBadRequest)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	buyOrder.BuyerNKNAddress = c.NKNClient.Address()
-
 	buyOrderJSON, err := json.Marshal(buyOrder)
 	if err != nil {
-		fmt.Printf("error marshalling sell order: " + err.Error())
+		c.Log.Error("error marshalling sell order", zap.Error(err))
+		w.WriteHeader(http.StatusBadRequest)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -219,6 +220,7 @@ func (c *Controller) Buy(w http.ResponseWriter, r *http.Request) {
 	io := bytes.NewBuffer(buyOrderJSON)
 	req, err := http.NewRequest("POST", c.SAASAddress+"/buy", io)
 	if err != nil {
+		c.Log.Error("creating http request sending a buy order to Party", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -227,19 +229,17 @@ func (c *Controller) Buy(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
+		c.Log.Error("sending buy order to Party", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("response Status:", resp.Status)
-
-	fmt.Printf("response body is: %+v", resp.Body)
-
 	if resp.StatusCode != 200 {
-		fmt.Printf("error: status code is not 200")
+		c.Log.Error("did not get a 200 status code from Party")
+		c.Log.Info("response body from Party: ", zap.String("body", fmt.Sprint(resp.Body)))
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error: something bad happend.. please check the logs")
+		json.NewEncoder(w).Encode("did not get a 200 status code from Party. Please check tea's backend service logs for more information. Response from Party was: " + fmt.Sprint(resp.Body))
 		return
 	}
 
@@ -250,37 +250,32 @@ func (c *Controller) Buy(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) StartNKNConnection() {
-	log.Printf("listening on %s", c.NKNClient.Address())
-	// defer c.NKNClient.Close()
+	c.Log.Info("listening on " + c.NKNClient.Address())
 	<-c.NKNClient.OnConnect.C
 	for {
 		select {
 		case msg := <-c.NKNClient.OnMessage.C:
-			isEncryptedStr := "unencrypted"
-			if msg.Encrypted {
-				isEncryptedStr = "encrypted"
-			}
-			log.Println("Receive", isEncryptedStr, "message", "\""+string(msg.Data)+"\"", "from", msg.Src)
-			writeLog("Receive " + isEncryptedStr + " message " + string(msg.Data) + " from " + msg.Src)
+			c.Log.Info("message: " + string(msg.Data) + " from " + msg.Src)
+			writeLog("Receive message " + string(msg.Data) + " from " + msg.Src)
+
 			nknNotification := &NKNNotification{}
 			err := json.Unmarshal(msg.Data, nknNotification)
 			if err != nil {
-				log.Println("error decoding nkn notification: " + err.Error())
+				c.Log.Error("error decoding nkn notification", zap.Error(err))
 				manager.send("error decoding nkn notification: " + err.Error())
 				return
 			}
 
-			// check for a private key
 			if nknNotification.PrivateKey != "" {
-				log.Println("saving private key to file system: " + nknNotification.PrivateKey)
-				// save the private key to the file system
+				c.Log.Info("saving private key to file system: " + nknNotification.PrivateKey)
 				if err := savePKToFS(nknNotification); err != nil {
-					log.Println("error saving private key to file system: " + err.Error())
+					c.Log.Error("error saving private key to file system", zap.Error(err))
 					manager.send("error saving private key to file system: " + err.Error())
 					return
 				}
 			}
 
+			c.Log.Debug("sending notification to client")
 			// send the notification to the client
 			manager.send(string(msg.Data))
 			msg.Reply([]byte("ok"))
@@ -293,21 +288,18 @@ func savePKToFS(pk *NKNNotification) error {
 	// create a new file and save the private key to it
 	f, err := os.Create("data/keys/" + pk.Chain + "-" + pk.Address + ".txt")
 	if err != nil {
-		log.Println("error creating private key file: " + err.Error())
 		return err
 	}
 	defer f.Close()
 
 	bte, err := json.Marshal(pk)
 	if err != nil {
-		log.Println("error marshalling private key: " + err.Error())
 		return err
 	}
 
 	// write the entire `pk` struct to the file
 	_, err = f.Write(bte)
 	if err != nil {
-		log.Println("error writing private key to file: " + err.Error())
 		return err
 	}
 
@@ -315,9 +307,7 @@ func savePKToFS(pk *NKNNotification) error {
 }
 
 func writeLog(msg string) error {
-	// check to see if the log.txt file exists
 	if _, err := os.Stat("data/log.txt"); os.IsNotExist(err) {
-		// create the file
 		f, err := os.Create("data/log.txt")
 		if err != nil {
 			log.Println(err)
@@ -328,13 +318,11 @@ func writeLog(msg string) error {
 
 	f, err := os.OpenFile("data/log.txt", os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
-
 	defer f.Close()
+
 	if _, err = f.WriteString(msg + "\n"); err != nil {
-		log.Println(err)
 		return err
 	}
 
@@ -342,6 +330,12 @@ func writeLog(msg string) error {
 }
 
 func (c *Controller) GetNKNAddress(w http.ResponseWriter, r *http.Request) {
+	if c.NKNClient == nil {
+		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, "NKN client is not initialized", http.StatusBadRequest)
+		return
+	}
+
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
@@ -349,71 +343,67 @@ func (c *Controller) GetNKNAddress(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(c.NKNClient.Address())
 }
 
-type OpenOrderRequest struct {
-	NKNAddress string `json:"nknAddress"`
-}
+// func (c *Controller) FetchOpenOrderByNKN(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Access-Control-Allow-Origin", "*")
+// 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+// 	w.Header().Set("Content-Type", "application/json")
 
-func (c *Controller) FetchOpenOrderByNKN(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	w.Header().Set("Content-Type", "application/json")
+// 	oor := &OpenOrderRequest{}
+// 	err := json.NewDecoder(r.Body).Decode(oor)
+// 	if err != nil {
+// 		log.Println(err)
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		json.NewEncoder(w).Encode("error decoding request body: " + err.Error())
+// 		return
+// 	}
 
-	oor := &OpenOrderRequest{}
-	err := json.NewDecoder(r.Body).Decode(oor)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error decoding request body: " + err.Error())
-		return
-	}
+// 	oorJson, err := json.Marshal(oor)
+// 	if err != nil {
+// 		log.Println(err)
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		json.NewEncoder(w).Encode("error marshalling open order request: " + err.Error())
+// 		return
+// 	}
 
-	oorJson, err := json.Marshal(oor)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error marshalling open order request: " + err.Error())
-		return
-	}
+// 	io := bytes.NewBuffer(oorJson)
+// 	req, err := http.NewRequest("POST", c.SAASAddress+"/fetchopenorderbynkn", io)
+// 	if err != nil {
+// 		log.Println(err)
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		json.NewEncoder(w).Encode("error creating request: " + err.Error())
+// 		return
+// 	}
 
-	io := bytes.NewBuffer(oorJson)
-	req, err := http.NewRequest("POST", c.SAASAddress+"/fetchopenorderbynkn", io)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error creating request: " + err.Error())
-		return
-	}
+// 	req.Header.Set("Content-Type", "application/json")
+// 	res, err := http.DefaultClient.Do(req)
+// 	if err != nil {
+// 		log.Println(err)
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		json.NewEncoder(w).Encode("error sending request: " + err.Error())
+// 		return
+// 	}
 
-	req.Header.Set("Content-Type", "application/json")
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error sending request: " + err.Error())
-		return
-	}
+// 	defer res.Body.Close()
+// 	body, err := ioutil.ReadAll(res.Body)
+// 	if err != nil {
+// 		log.Println(err)
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		json.NewEncoder(w).Encode("error reading response body: " + err.Error())
+// 		return
+// 	}
 
-	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error reading response body: " + err.Error())
-		return
-	}
+// 	NKNNotification := &[]NKNNotification{}
+// 	err = json.Unmarshal(body, NKNNotification)
+// 	if err != nil {
+// 		log.Println(err)
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		json.NewEncoder(w).Encode("error unmarshalling response body: " + err.Error())
+// 		return
+// 	}
 
-	NKNNotification := &[]NKNNotification{}
-	err = json.Unmarshal(body, NKNNotification)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode("error unmarshalling response body: " + err.Error())
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(NKNNotification)
-}
+// 	w.WriteHeader(http.StatusOK)
+// 	json.NewEncoder(w).Encode(NKNNotification)
+// }
 
 func (c *Controller) GetPrivateKeys(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -423,49 +413,40 @@ func (c *Controller) GetPrivateKeys(w http.ResponseWriter, r *http.Request) {
 	// read the keys stored in the keys/ directory
 	files, err := ioutil.ReadDir("data/keys/")
 	if err != nil {
-		log.Println(err)
+		c.Log.Error("error reading keys directory: " + err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("error reading keys directory: " + err.Error())
 		return
 	}
 
-	// create a slice to hold the private keys
 	var privateKeys []NKNNotification
-
-	// loop through the files and read the private keys
 	for _, f := range files {
-		// open the file
 		file, err := os.Open("data/keys/" + f.Name())
 		if err != nil {
-			log.Println(err)
+			c.Log.Error("error opening Private Key file: " + err.Error())
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode("error opening file: " + err.Error())
+			json.NewEncoder(w).Encode("error opening Private Key file: " + err.Error())
 			return
 		}
 
-		// read the file
 		bte, err := ioutil.ReadAll(file)
 		if err != nil {
-			log.Println(err)
+			c.Log.Error("reading file: " + err.Error())
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode("error reading file: " + err.Error())
+			json.NewEncoder(w).Encode("reading file: " + err.Error())
 			return
 		}
 
-		// unmarshal the private key
 		pk := &NKNNotification{}
 		err = json.Unmarshal(bte, pk)
 		if err != nil {
-			log.Println(err)
+			c.Log.Error("error unmarshalling private key: " + err.Error())
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode("error unmarshalling private key: " + err.Error())
+			json.NewEncoder(w).Encode("unmarshalling private key: " + err.Error())
 			return
 		}
 
-		// add the private key to the slice
 		privateKeys = append(privateKeys, *pk)
-
-		// close the file
 		file.Close()
 	}
 

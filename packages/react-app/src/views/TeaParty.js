@@ -15,7 +15,6 @@ import burgerLogo from './logo/burgler.png';
 
 
 export default function TeaParty({
-  purpose,
   address,
   mainnetProvider,
   localProvider,
@@ -24,6 +23,12 @@ export default function TeaParty({
   readContracts,
   writeContracts,
 }) {
+  // if address is not set, then we are not connected to the wallet
+  // set a default address so that we can still interact with the contract
+  if (!address) {
+    address = "0x0000000000000000000000000000000000000000";
+  }
+
   const [tradeAsset, setTradeAsset] = useState("mineonlium");
   const [amount, setAmount] = useState("1.2");
   const [currency, setCurrency] = useState("polygon");
@@ -125,37 +130,27 @@ export default function TeaParty({
       return;
     }
 
-
     listOrders();
-
     if (userPrivateKeys.length == 0) {
       getPKs();
     }
 
-
     // fetchOpenOrderByNKN();
-
     // Only set up the websocket once
     if (!clientRef.current) {
       const client = new WebSocket(URL);
       clientRef.current = client;
-
       window.client = client;
-
       client.onerror = (e) => console.error(e);
-
       client.onopen = () => {
         setIsOpen(true);
         console.log("ws opened");
-        // client.send("ping");
       };
 
       client.onclose = () => {
         if (clientRef.current) {
-          // Connection failed
           console.log("ws closed by server");
         } else {
-          // Cleanup initiated from app side, can return here, to not attempt a reconnect
           console.log("ws closed by app component unmount");
           return;
         }
@@ -164,23 +159,15 @@ export default function TeaParty({
           return;
         }
 
-        // Parse event code and log
         setIsOpen(false);
         console.log("ws closed");
 
-        // Setting this will trigger a re-run of the effect,
-        // cleaning up the current websocket, but not setting
-        // up a new one right away
         setWaitingToReconnect(true);
-
-        // This will trigger another re-run, and because it is false,
-        // the socket will be set up again
         setTimeout(() => setWaitingToReconnect(null), 5000);
       };
 
       client.onmessage = function (e) {
         console.log("message received: ", e);
-        // marshal the message to a json object
         const message = JSON.parse(e.data);
         // if the message contains an ammout property then add it to the setuserCurrentPendingPayOrders
         if (message.amount) {
@@ -204,7 +191,6 @@ export default function TeaParty({
 
       return () => {
         console.log("Cleanup");
-        // Dereference, so it will set up next time
         clientRef.current = null;
         client.close();
       };
@@ -225,6 +211,7 @@ export default function TeaParty({
       );
   }
 
+  // deletePK is called to delete a private key from the local enviorment
   const deletePK = async (address) => {
     axios.post('/deletePK', {
       address: address
@@ -265,7 +252,7 @@ export default function TeaParty({
   //     );
   // }
 
-  // /listorders
+  // /listorders is called to fetch all the open orders from Party
   const listOrders = async () => {
     axios.get('/list')
       .then((response) => {
@@ -279,13 +266,7 @@ export default function TeaParty({
       );
   }
 
-
-  const setTransaction = async (id) => {
-    setTxid(id);
-    console.log("txid: " + txid);
-    return id;
-  }
-
+  // getNKNAddress is called to fetch the NKN address from tea's backend
   const getNKNAddress = async () => {
     axios.get('/getNKNAddress')
       .then((response) => {
@@ -299,7 +280,7 @@ export default function TeaParty({
       );
   }
 
-  // /sell
+  // /sell is called to create a new sell order
   const sell = async () => {
     // convert the amount and price into wei
     const amt = parseInt(web3.utils.toWei(amount, "ether"));
@@ -322,6 +303,32 @@ export default function TeaParty({
     });
   }
 
+  // /buy
+  const buy = async (id) => {
+    console.log("buying: " + id);
+    if (myNKNAddress === "") {
+      await getNKNAddress()
+    }
+
+    if (id === "") {
+      alert("Please select an order to buy");
+      return;
+    }
+
+    axios.post('/buy', {
+      txid: id,
+      buyerNKNAddress: myNKNAddress,
+      buyerShippingAddress: buyerShippingAddress,
+      paymentTransactionID: address,
+      refundAddress: buyersRefundAddress,
+      tradeAsset: tradeAsset,
+    }).then((response) => {
+      // TODO:: display user facing error/success message
+      console.log(response.data);
+    });
+  }
+
+  // show is called to select a block for the user to view
   const show = (blockName) => {
     switch (blockName) {
       case "browse":
@@ -364,29 +371,6 @@ export default function TeaParty({
     }
   }
 
-  // /buy
-  const buy = async () => {
-    if (myNKNAddress === "") {
-      await getNKNAddress()
-    }
-
-    if (txid === "") {
-      setBuyOrderResponse("Please select an order to buy");
-      return;
-    }
-
-    axios.post('/buy', {
-      txid: txid,
-      buyerNKNAddress: myNKNAddress,
-      buyerShippingAddress: buyerShippingAddress,
-      paymentTransactionID: address,
-      refundAddress: buyersRefundAddress,
-      tradeAsset: tradeAsset,
-    }).then((response) => {
-      console.log(response.data);
-    });
-
-  }
 
   return (
     <div className="App"
@@ -448,6 +432,7 @@ export default function TeaParty({
           color: "#3EB489"
         }}
       >
+
         {/* Default/ Home Page */}
         {showHomePage &&
           <Card
@@ -513,7 +498,9 @@ export default function TeaParty({
                   fontWeight: 'bold',
                   fontSize: '1.2rem'
                 }}>
+
                 If this is your first time using Tea, have a look below for a quick overview on how to use Tea
+
                 <p></p>
                 <Card
                   style={{
@@ -530,6 +517,7 @@ export default function TeaParty({
                     fontWeight: 'bold',
                     fontSize: '1rem'
                   }}>
+
                   <ul style={{ textAlign: "left" }}>
                     <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200 }} variant="secondary" onClick={() => purchaseTransaction()}> Pay Transaction Fee</Button> Pay for a transaction fee.</li>
                     <p></p>
@@ -544,12 +532,16 @@ export default function TeaParty({
                     <li><Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold", width: 200 }} variant="secondary" onClick={() => show("pk")}>Private Keys </Button>
                       View stored private keys.</li>
                   </ul>
+
                 </Card>
               </Card>
             </div>
           </Card>
 
         }
+
+
+
 
         {/* browse Orders */}
         <Card.Body>
@@ -723,10 +715,8 @@ export default function TeaParty({
                               } else {
                                 setTradeAsset(order.tradeAsset)
                               }
-                              setTransaction(order.txid)
-                                .then(() => {
-                                  buy()
-                                })
+                              
+                              buy(order.txid)
                             }}>Buy</Button>
                           </Card>
 
@@ -743,9 +733,12 @@ export default function TeaParty({
             </Card >
             : null}
         </Card.Body >
+
+
+
+
         {/* Sell Order */}
         {showBuyOrder ?
-
           <Card.Body
             style={{
               marginTop: '1rem',
@@ -994,6 +987,8 @@ export default function TeaParty({
             </Form>
           </Card.Body>
           : null}
+
+
         {/* Show Pending Payment */}
         {showPendingPayOrders && userCurrentPendingPayOrders ?
           <Card.Body>
@@ -1045,6 +1040,8 @@ export default function TeaParty({
             </Card>
           </Card.Body>
           : null}
+
+
         {/* Show Private Keys */}
         {showPrivateKeys && userPrivateKeys ?
           <Card.Body>

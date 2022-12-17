@@ -2,7 +2,7 @@ run:
 	@cd packages/backend && make run
 
 staging:
-	@KO_DATA_PATH=cmd/kodata/ SAAS_ADDRESS="http://104.37.251.139:8080" go run cmd/main.go
+	@cd packages/backend && make staging
 
 build:
 	@cd packages/backend && make build

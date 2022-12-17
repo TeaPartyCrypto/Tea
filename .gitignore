@@ -41,9 +41,6 @@ build
 # testing
 coverage
 
-# production
-build
-
 # Hardhat files
 cache
 artifacts

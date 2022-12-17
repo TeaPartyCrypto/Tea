@@ -176,8 +176,7 @@ function App(props) {
     mainnetProviderPollingTime,
   );
 
-  // keep track of a variable from the contract in the local React state:
-  const purpose = useContractReader(readContracts, "TeaParty", "purpose", [], localProviderPollingTime);
+
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
@@ -310,7 +309,6 @@ function App(props) {
             tx={tx}
             writeContracts={writeContracts}
             readContracts={readContracts}
-            purpose={purpose}
           />
             {/* <ExampleUI
             address={address}
@@ -322,7 +320,6 @@ function App(props) {
             tx={tx}
             writeContracts={writeContracts}
             readContracts={readContracts}
-            purpose={purpose}
           /> */}
         </Route>
         <Route exact path="/debug">
