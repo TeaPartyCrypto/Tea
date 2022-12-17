@@ -3,14 +3,23 @@
 <p align="center">
 <img width="200" src="/teapartybiglogo.png" alt="Material Bread logo">
 <p align="center">
-The application interface for interacting with <a href="www.teapartycrypto.com">TeaParty</a>
+The application interface for <a href="www.teapartycrypto.com">TeaParty</a>
 </p>
 </p>
 
 
 ## Design
 
-`TeaParty` operates 
+`TeaParty` consists of two core parts `tea` & `party`, as illustrated by the diagram below. 
+
+* `party` - The backend services and logic that support the platform. This is where all the magic happens 🪄 ( If this sounds complicated, just think of `party` as the 🧠 "brains" 🧠 of the project .) 
+
+* `tea` - The frontend services and logic that support 
+
+<p align="center">
+<img width="200" src="/teadiagram.png" alt="Material Bread logo">
+<p align="center">
+
 
 `tea` was elected to be designed as a desktop application over a hosted web service in order to provide users with the most control, safety, privacy, and security, while interacting with the marketplace. (**Note** Although `tea` is packaged as a desktop application, it does not have to run on your local desktop! In fact it is quite happy living on a remote server.)
 
