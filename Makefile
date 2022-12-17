@@ -12,4 +12,5 @@ debug:
 	@make run
 
 image:
-	@cd packages/backend && docker build -t imaybeagod/tea . && docker push imaybeagod/tea
+	@make build
+	@cd packages/backend && gcloud builds submit --tag gcr.io/mineonlium/tea

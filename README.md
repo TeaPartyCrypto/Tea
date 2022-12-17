@@ -26,7 +26,6 @@ Start a release by navigating into the `/release` folder (either within this rep
 docker compose up -d
 ```
 
-
 ### Build an run `tea` from source for LOCAL testing
 
 To start `tea` pointing to a local instance of `Party`:
@@ -57,7 +56,7 @@ make prod
 
 You can now visit `http://localhost:8080` to view the interface.
 
-### Create a release
+### Build and Bundle from Source
 
 Execute the following to build and bundle the application from source:
 

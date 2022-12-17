@@ -3,6 +3,7 @@ services:
 
  # tea is a dockerized version of the desktop client to use for testing
   tea:
+    image: gcr.io/mineonlium/tea
     build:
       context: .
       dockerfile: Dockerfile
