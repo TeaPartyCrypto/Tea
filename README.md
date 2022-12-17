@@ -73,7 +73,7 @@ I am currently in the process of introducing the following assets into `TeaParty
 
 Please download and configure Docker for your system. (GUI - [download](https://www.docker.com/products/docker-desktop/) CLI - [download](https://docs.docker.com/get-docker/))
 
-If you need help getting started, feel free to join us in the MineOnlium [Discord!](https://discord.gg/4JFjejV4FN) or PM me directly on Discord @ Filth#5858
+If you need help getting started, feel free to join us in the MineOnlium [Discord!](https://discord.gg/4JFjejV4FN) or PM me directly on Discord @ Filth#5858 (439229993625714688)
 
 Here are a few things you can currently do with `tea`:
 
@@ -145,7 +145,7 @@ Interested? Try:
 * [Submiting](https://github.com/TeaPartyCrypto/Tea/pulls) a PR. 
 * [Creating](https://github.com/TeaPartyCrypto/Tea/issues) an issue!
 * Join the MineOnlium [Discord](https://discord.gg/4JFjejV4FN).
-* PM me on Discord @ Filth#5858.
+* PM me on Discord @ Filth#5858 (439229993625714688).
 
 ## Backend Interactions 
 ### /sell
