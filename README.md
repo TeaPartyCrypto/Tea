@@ -8,7 +8,7 @@ The application interface for <a href="www.teapartycrypto.com">TeaParty</a>
 </p>
 
 
-## Design
+## Design / Overview
 
 `TeaParty` consists of two core parts `tea` & `party`, as illustrated by the diagram below. 
 
@@ -27,7 +27,12 @@ The application interface for <a href="www.teapartycrypto.com">TeaParty</a>
 
 After starting the NKN connection, `tea` also begins serving the static assets located at `cmd/kodata` (our React application) while expoing several API endpoints for the user to interact with `Party` 
 
-`tea` is now at your disposal to interact with 🎉`Party`🥳
+`tea` is now at your disposal to interact with 🎉`Party`🎉
+
+## System Prerequisites for Running `tea`
+
+* Docker (GUI - [download](https://www.docker.com/products/docker-desktop/) (CLI - [download](https://docs.docker.com/get-docker/))
+       
 
 ## Getting Started
 
