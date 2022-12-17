@@ -1,0 +1,15 @@
+version: "2"
+services:
+
+ # tea is a dockerized version of the desktop client to use for testing
+  tea:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      SAAS_ADDRESS: http://10.1.243.98:8080
+    ports:
+    - 8081:8081
+    volumes:
+    - ./data:/project/data

@@ -3,10 +3,9 @@ WORKDIR /project
 COPY . ./
 RUN cd /project/cmd && go build -o /project/bin/be
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal
-EXPOSE 8080
-ENV KO_DATA_PATH /kodata
-COPY --from=builder /project/cmd/kodata/ ${KO_DATA_PATH}/
-COPY --from=builder /project/bin/be /be
+ENV KO_DATA_PATH /project/kodata
+COPY /cmd/kodata/ ${KO_DATA_PATH}/
+EXPOSE 8081
+USER root
 
-ENTRYPOINT ["/be"]
+ENTRYPOINT ["/project/bin/be"]

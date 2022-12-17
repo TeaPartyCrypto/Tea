@@ -12,5 +12,4 @@ debug:
 	@make run
 
 image:
-	@make build
-	@docker build -t imaybeagod/tea . && docker push imaybeagod/tea
+	@cd packages/backend && docker build -t imaybeagod/tea . && docker push imaybeagod/tea
