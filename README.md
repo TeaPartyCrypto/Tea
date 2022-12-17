@@ -16,7 +16,18 @@ After starting the NKN connection, `tea` also begins serving the static assets l
 
 ## Getting Started
 
-### Start `tea` for LOCAL testing
+### Start `tea` from a release
+
+Releases can be downloaded from the releases on the right side of the homepage of this repository on github. Or the most current build is always avalible in the `release` directory. 
+
+Start a release by navigating into the `/release` folder (either within this repo. or via download) and executing the following:
+
+```
+docker compose up -d
+```
+
+
+### Build an run `tea` from source for LOCAL testing
 
 To start `tea` pointing to a local instance of `Party`:
 
@@ -26,7 +37,7 @@ make run
 
 You can now visit `http://localhost:8080` to view the interface.
 
-### Start `tea` for STAGING testing
+### Build an run `tea` from source for STAGING testing
 
 To start `tea` pointing to the STAGING instance of `Party`:
 
@@ -36,7 +47,7 @@ make staging
 
 You can now visit `http://localhost:8080` to view the interface.
 
-### Start `tea` for PRODUCTION testing
+### Build an run `tea` from source for PRODUCTION testing
 
 To start `tea` pointing to the production instance of `Party`:
 
@@ -46,7 +57,7 @@ make prod
 
 You can now visit `http://localhost:8080` to view the interface.
 
-### Build from source
+### Create a release
 
 Execute the following to build and bundle the application from source:
 
