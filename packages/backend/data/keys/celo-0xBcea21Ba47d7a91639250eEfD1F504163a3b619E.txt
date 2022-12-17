@@ -1,0 +1,1 @@
+{"address":"0xBcea21Ba47d7a91639250eEfD1F504163a3b619E","amount":"","network":"","privateKey":"6c7a776cd695eeb659d6b5644c6524bef63137a959075810561cc414e64a49f9","chain":"celo","error":""}
