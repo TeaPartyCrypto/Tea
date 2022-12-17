@@ -83,6 +83,8 @@ Please download and configure Docker for your system. (GUI - [download](https://
 
 If you need help getting started, feel free to join us in the MineOnlium [Discord!](https://discord.gg/4JFjejV4FN) or PM me directly on Discord @ Filth#5858 (439229993625714688)
 
+You can also post in the Github [Discussions](https://github.com/TeaPartyCrypto/Tea/discussions)
+
 Here are a few things you can currently do with `tea`:
 
 * Browse the marketplace. 
