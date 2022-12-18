@@ -80,6 +80,10 @@ func main() {
 	c.NKNClient = toClient
 	c.SAASAddress = os.Getenv("SAAS_ADDRESS")
 
+	if c.SAASAddress == "" {
+		c.SAASAddress = "http://104.37.251.139:8080"
+	}
+
 	// create a new sugard logger
 	c.Log, err = zap.NewProduction()
 	if err != nil {

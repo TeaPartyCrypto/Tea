@@ -69,6 +69,10 @@ func (c *Controller) DeletePrivateKey(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) RootHandler(w http.ResponseWriter, r *http.Request) {
 	once.Do(func() {
 		kdp := path.Join(os.Getenv("KO_DATA_PATH"))
+		if kdp == "" {
+			kdp = "kodata"
+		}
+
 		if !strings.HasSuffix(kdp, "/") {
 			kdp = kdp + "/"
 		}
