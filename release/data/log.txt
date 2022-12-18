@@ -1,2 +1,0 @@
-Receive message {"address":"hUMaJuxMnFL6vDqTZbouLdKj2aFwvC26hc7Q5rFPBAc","amount":"1200000000000000000","network":"solana","privateKey":"","chain":"","error":""} from 6efccd54a4dc01cc6d0bc30e781f71582b722b203aef8031657b50ae951ac2cb
-Receive message {"address":"0x717404681A5A180e0269727A49b423040BDCCE0D","amount":"1200000000000000000","network":"mineonlium","privateKey":"","chain":"","error":""} from e625e9d62fb0a6540a29315d28b17cb78c9a9d8211460fc014f7db83e7b584b5

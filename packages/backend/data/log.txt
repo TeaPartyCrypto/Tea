@@ -1,5 +1,0 @@
-
-Receive message {"address":"0x06462045DFAd6B3FcBd36c6632B8ED42fA97c1DE","amount":"1200000000000000000","network":"mineonlium","privateKey":"","chain":"","error":""} from c32d976734e345bd7dafb80253dd73a1cdbe8ceb7ed36d3f645310c88dd8c7e5
-Receive message {"address":"0x6a04885C1480C8Db73B0979259D32Cd0055d2903","amount":"100000000000000000000","network":"mineonlium","privateKey":"","chain":"","error":""} from 97e01343ddfa44ae699327c674e7e0aae669eb5e1facda59dc65e7966e5c2270
-Receive message {"address":"0xe67658e0f9bc5e1fCe6CF3011Ad92aE6725b8cBA","amount":"1000000000000000000","network":"polygon","privateKey":"","chain":"","error":""} from 13acc91bcbcd19893ff7b21efd63ed8795d764a69da3af25ec91fa752c44023a
-Receive message {"address":"0x67c1Bf3C8feCCdE3B962E31bD40DDE5CAb10cAfd","amount":"1000000000000000000","network":"mineonlium","privateKey":"","chain":"","error":""} from 6e603b33f813a80a87111d4fad81af356c8eedc8663baa81c4f6f06bf9d19d43
