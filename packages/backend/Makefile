@@ -6,7 +6,7 @@ staging:
 
 build:
 	@cd cmd && go build -o ../../../release/tea main.go
-	@cd ../react-app && yarn build
+	@cd ../react-app && yarn && yarn build
 	@cd ../react-app && rm -rf ../backend/cmd/kodata  &&  mv build kodata && cp -r kodata ../../release/  && mv kodata ../backend/cmd/kodata 
 
 debug:
