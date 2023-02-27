@@ -2,7 +2,7 @@ run:
 	@KO_DATA_PATH=cmd/kodata/ SAAS_ADDRESS="http://localhost:45005" go run cmd/main.go
 
 staging:
-	@KO_DATA_PATH=cmd/kodata/ SAAS_ADDRESS="http://localhost:8080" go run cmd/main.go
+	@KO_DATA_PATH=cmd/kodata/ SAAS_ADDRESS="http://34.172.60.163:8080" go run cmd/main.go
 
 build:
 	@cd cmd && go build -o ../../../release/tea main.go
