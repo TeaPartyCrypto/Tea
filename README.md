@@ -97,11 +97,7 @@ Here are a few things you can currently do with `tea`:
 ### Start `tea` from a release
 Releases can be downloaded from the releases on the right side of the homepage of this repository on github. Or the most current build is always avalible in the `release` directory. 
 
-Start a release by navigating into the `/release` folder (either within this repo. or via download) and executing the following:
-
-```
-docker compose up -d
-```
+Start a release by navigating into the `/release` folder (either within this repo. or via download) and executing the proper binary for your system. 
 
 ### Build an run `tea` from source for LOCAL testing
 
