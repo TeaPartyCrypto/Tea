@@ -34,6 +34,8 @@ After starting the NKN connection, `tea` also begins serving the static assets l
 `TeaParty` currently supports the trade of the following assets:
 * MineOnlium
 * Ethereum
+* EthOne
+* Octa
 * Polygon
 * Celo
 * Solana
@@ -69,6 +71,10 @@ I am currently in the process of introducing the following assets into `TeaParty
        * Celo: Alfajores ([faucet](https://celo.org/developers/faucet))
 
        * MO: Mainnet (Soon to be testnet with faucet) 
+      
+       * OCTA: Mainnet
+
+       * ETHONE: Mainnet
 
 1. The watch timeout has been taken down to 300 secconds from 2 hours ( After 300 secconds any pending transaction will fail) 
 
