@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Button, Card, Col, Container, Form, Row, Dropdown, Toast, ToastContainer } from 'react-bootstrap';
 import web3 from 'web3';
 import moLogo from './logo/mo.svg';
-import octLogo from './logo/oct.svg';
+import octLogo from './logo/octa.png';
 import kasLogo from './logo/kaspa.png';
 import celoLogo from './logo/celo.png';
 import ethLogo from './logo/eth.png';
@@ -13,6 +13,7 @@ import rxdLogo from './logo/rxd.png';
 import solLogo from './logo/sol.png';
 import ethOneLogo from './logo/etherone.png';
 import teaPartyLogo from './logo/teaparty.png';
+import usdtLogo from './logo/usdt.svg';
 import burgerLogo from './logo/burgler.png';
 
 
@@ -94,6 +95,8 @@ export default function TeaParty({
         return octLogo;
       case "ethOne":
         return ethOneLogo;
+      case "bscUSDT":
+        return usdtLogo;
       case "burger":
         return burgerLogo;
       default:
@@ -586,6 +589,8 @@ export default function TeaParty({
                   <Dropdown.Item onClick={() => setSortBy("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSortBy("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
+
                 </Dropdown.Menu>
               </Dropdown>
               <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={listOrders}>Refresh</Button>
@@ -713,6 +718,7 @@ export default function TeaParty({
                                     <Dropdown.Item onClick={() => setTradeAsset("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setTradeAsset("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
                                   </Dropdown.Menu>
                                 </Dropdown>
                               </div>
@@ -828,6 +834,7 @@ export default function TeaParty({
                         <Dropdown.Item onClick={() => setCurrency("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
+                        <Dropdown.Item onClick={() => setCurrency("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
                   </Col>
@@ -901,6 +908,7 @@ export default function TeaParty({
                         <Dropdown.Item onClick={() => setTradeAsset("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
+                        <Dropdown.Item onClick={() => setTradeAsset("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("ANY")}><img src={returnLogo("ANY")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>Any</span></Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>

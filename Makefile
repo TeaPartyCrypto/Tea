@@ -7,6 +7,9 @@ staging:
 build:
 	@cd packages/backend && make build
 
+release:
+	@cd packages/backend && make release
+
 debug:
 	@make build
 	@make run
