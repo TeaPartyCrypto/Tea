@@ -324,6 +324,10 @@ export default function TeaParty({
       return;
     }
 
+    // remove the order from the current open orders
+    const newCurrentOpenOrders = currentOpenOrders.filter((order) => order.txid !== id);
+    setCurrentOpenOrders(newCurrentOpenOrders);
+
     axios.post('/buy', {
       txid: id,
       buyerNKNAddress: myNKNAddress,
