@@ -690,8 +690,6 @@ export default function TeaParty({
                               onChange={(e) => setBuyersRefundAddress(e.target.value)} />
                             <input style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="Buyers Shipping Address"
                               onChange={(e) => setBuyerShippingAddress(e.target.value)} />
-                            <input style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="Buyers Payment Transaction ID"
-                              onChange={(e) => setBuyersPaymentTransactionID(e.target.value)} />
                             {order.tradeAsset === "ANY" ?
                               <div
                                 style={{
