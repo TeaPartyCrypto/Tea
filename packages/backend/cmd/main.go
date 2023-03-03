@@ -104,5 +104,4 @@ func main() {
 	http.HandleFunc("/ws", c.SocketHandler)
 	log.Println("Listening on :8081")
 	http.ListenAndServe(":8081", nil)
-
 }

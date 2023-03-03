@@ -176,7 +176,7 @@ func (c *Controller) Sell(w http.ResponseWriter, r *http.Request) {
 	// return accepted to the client
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
-	json.NewEncoder(w).Encode("sell order accepted")
+	json.NewEncoder(w).Encode(body)
 }
 
 func (c *Controller) ListOrders(w http.ResponseWriter, r *http.Request) {

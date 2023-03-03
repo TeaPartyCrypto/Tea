@@ -44,9 +44,13 @@ export default function TeaParty({
   const [buyerShippingAddress, setBuyerShippingAddress] = useState("0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3");
   const [buyersRefundAddress, setBuyersRefundAddress] = useState("0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3");
   const [sellersRefundAddress, setSellersRefundAddress] = useState("0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3");
+  const [privateSell, setPrivateSell] = useState(false);
   const [userCurrentPendingPayOrders, setuserCurrentPendingPayOrders] = useState([]);
   const [pendingPayNumberAmmount, setPendingPayNumberAmmount] = useState(0);
   const [userPrivateKeys, setUserPrivateKeys] = useState([]);
+  const [showPrivateBuy, setShowPrivateBuy] = useState(false);
+  const [tradeInfo, setTradeInfo] = useState(false);
+  const [orderId, setOrderId] = useState("");
 
   const [currentOpenOrders, setCurrentOpenOrders] = useState();
   const [sellOrderResponse, setSellOrderResponse] = useState("");
@@ -130,7 +134,6 @@ export default function TeaParty({
     console.log("awaiting metamask/web3 confirm result...", result);
 
   }
-
 
 
   useEffect(() => {
@@ -305,9 +308,12 @@ export default function TeaParty({
       sellerNKNAddress: myNKNAddress,
       paymentTransactionID: address,
       refundAddress: sellersRefundAddress,
+      private: privateSell,
     }).then((response) => {
       console.log(response.data);
-      setSellOrderResponse(response.data);
+      // base64 decode the response
+      const decoded = atob(response.data);
+      setSellOrderResponse(decoded);
       listOrders();
     });
   }
@@ -338,8 +344,40 @@ export default function TeaParty({
     }).then((response) => {
       // TODO:: display user facing error/success message
       console.log(response.data);
+      alert(response.data);
     });
   }
+
+  // /privatebuy
+  const privatebuy = async () => {
+    console.log("buying: " + orderId);
+    if (myNKNAddress === "") {
+      await getNKNAddress()
+    }
+
+    if (orderId === "") {
+      alert("Please select an order to buy");
+      return;
+    }
+
+    // remove the order from the current open orders
+    const newCurrentOpenOrders = currentOpenOrders.filter((order) => order.txid !== orderId);
+    setCurrentOpenOrders(newCurrentOpenOrders);
+
+    axios.post('/buy', {
+      txid: orderId,
+      buyerNKNAddress: myNKNAddress,
+      buyerShippingAddress: buyerShippingAddress,
+      paymentTransactionID: address,
+      refundAddress: buyersRefundAddress,
+      tradeAsset: tradeAsset,
+    }).then((response) => {
+      // TODO:: display user facing error/success message
+      console.log(response.data);
+      alert(response.data);
+    });
+  }
+
 
   // show is called to select a block for the user to view
   const show = (blockName) => {
@@ -350,6 +388,7 @@ export default function TeaParty({
         setShowBuyOrder(false);
         setShowPrivateKeys(false);
         setShowHomePage(false);
+        setShowPrivateBuy(false);
         return
       case "pk":
         setShowBrowseOrders(false);
@@ -357,6 +396,7 @@ export default function TeaParty({
         setShowBuyOrder(false);
         setShowPrivateKeys(true);
         setShowHomePage(false);
+        setShowPrivateBuy(false);
         return
       case "sell":
         setShowBrowseOrders(false);
@@ -364,6 +404,7 @@ export default function TeaParty({
         setShowBuyOrder(true);
         setShowPrivateKeys(false);
         setShowHomePage(false);
+        setShowPrivateBuy(false);
         return
       case "payorder":
         setShowBrowseOrders(false);
@@ -371,6 +412,7 @@ export default function TeaParty({
         setShowBuyOrder(false);
         setShowPrivateKeys(false);
         setShowHomePage(false);
+        setShowPrivateBuy(false);
         return
       case "home":
         setShowBrowseOrders(false);
@@ -379,6 +421,12 @@ export default function TeaParty({
         setShowPrivateKeys(false);
         setShowHomePage(true);
         return
+      case "private":
+        setShowPrivateBuy(true);
+        setShowBrowseOrders(true);
+        setshowPendingPayOrders(false);
+        setShowBuyOrder(false);
+        setShowHomePage(false);
       case "nav":
         setShowNav(!showNav);
     }
@@ -594,10 +642,54 @@ export default function TeaParty({
                   <Dropdown.Item onClick={() => setSortBy("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
-
+                  <Dropdown.Item onClick={() => show("private") & setSortBy("none")}><img src={returnLogo("tp")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Private</span></Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={listOrders}>Refresh</Button>
+              {/* Show Private Buy Pannel that allows the user to initate a trade by providing a order ID */}
+              {showPrivateBuy ?
+                <Card.Body>
+                  <Form>
+                    <Form.Group controlId="formOrderId">
+                      <Row>
+                        <Col
+                          style={{
+                            marginTop: '1rem',
+                            marginBottom: '1rem',
+                            boarder: 'dark',
+                            padding: '1rem',
+                            width: 'auto',
+                            textAlign: 'right',
+                            margin: 'auto'
+                          }}>
+                          <Form.Label>Order ID</Form.Label>
+                        </Col>
+                        <Col
+
+                          style={{
+                            marginTop: '1rem',
+                            marginBottom: '1rem',
+                            boarder: 'dark',
+                            padding: '1rem',
+                            width: 'auto',
+                            contentAlign: 'center',
+                            margin: 'auto'
+                          }}>
+                          <Form.Control style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="" onChange={(e) => setOrderId(e.target.value)} />
+                        </Col>
+                      </Row>
+                    </Form.Group>
+                    <p></p>
+                    {/* <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={fetchTradeInfo}>Fetch Trade Info</Button> */}
+                    <p></p>
+                    <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={privatebuy}>Buy</Button>
+                    <br />
+                    {/* Show trade info once button is clicked */}
+
+                  </Form>
+                </Card.Body>
+                : null}
+
               {currentOpenOrders.map((order) => (
                 <Card style={{
                   backgroundColor: '#282c34',
@@ -732,7 +824,7 @@ export default function TeaParty({
                               } else {
                                 setTradeAsset(order.tradeAsset)
                               }
-                              
+
                               buy(order.txid)
                             }}>Buy</Button>
                           </Card>
@@ -1001,6 +1093,34 @@ export default function TeaParty({
                   </Col>
                 </Row>
               </Form.Group>
+              <Form.Group controlId="privateSell">
+                <Row>
+                  <Col
+                    style={{
+                      marginTop: '1rem',
+                      marginBottom: '1rem',
+                      boarder: 'dark',
+                      padding: '1rem',
+                      width: 'auto',
+                      textAlign: 'right',
+                      margin: 'auto'
+                    }}>
+                    <Form.Label>Private Sell</Form.Label>
+                  </Col>
+                  <Col
+                    style={{
+                      marginTop: '1rem',
+                      marginBottom: '1rem',
+                      boarder: 'dark',
+                      padding: '1rem',
+                      width: 'auto',
+                      textAlign: 'left',
+                      margin: 'auto'
+                    }}>
+                    <Form.Check type="checkbox" onChange={(e) => setPrivateSell(e.target.checked)} />
+                  </Col>
+                </Row>
+              </Form.Group>
               <p></p>
               <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={sell}>Sell</Button>
               <br />
@@ -1063,6 +1183,10 @@ export default function TeaParty({
             </Card>
           </Card.Body>
           : null}
+
+
+
+
 
 
         {/* Show Private Keys */}
