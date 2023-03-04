@@ -55,6 +55,9 @@ type SellOrder struct {
 	PaymentTransactionID string `json:"paymentTransactionID"`
 	// RefundAddress reflects an address that Party can send a refund to if the NKN transaction fails.
 	RefundAddress string `json:"refundAddress"`
+	// Private reflects if the trade order is to be private or not. I.E. listed in the public
+	// market place or not.
+	Private bool `json:"private"`
 }
 
 // NKNNotification is a struct that contains the information expected in a NKN notification
