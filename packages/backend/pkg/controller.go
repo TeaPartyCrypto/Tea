@@ -173,10 +173,13 @@ func (c *Controller) Sell(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// convert the response body to a string
+	bodyString := string(body)
+
 	// return accepted to the client
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
-	json.NewEncoder(w).Encode(body)
+	json.NewEncoder(w).Encode(bodyString)
 }
 
 func (c *Controller) ListOrders(w http.ResponseWriter, r *http.Request) {

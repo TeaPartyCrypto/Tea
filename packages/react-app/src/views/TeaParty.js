@@ -312,8 +312,7 @@ export default function TeaParty({
     }).then((response) => {
       console.log(response.data);
       // base64 decode the response
-      const decoded = atob(response.data);
-      setSellOrderResponse(decoded);
+      setSellOrderResponse(response.data);
       listOrders();
     });
   }
