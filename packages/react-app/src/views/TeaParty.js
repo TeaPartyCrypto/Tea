@@ -218,6 +218,7 @@ export default function TeaParty({
         return response.data;
       })
       .catch((error) => {
+        alert("Error Fetching Private Keys: " + error);
         console.log(error);
       }
       );
@@ -238,6 +239,7 @@ export default function TeaParty({
       })
       .catch((error) => {
         console.log(error);
+        alert("Error Deleting Private Key: " + error);
       }
       );
   }
@@ -274,6 +276,7 @@ export default function TeaParty({
       })
       .catch((error) => {
         console.log(error);
+        alert("Error Fetching Open Orders: " + error);
       }
       );
   }
@@ -288,6 +291,7 @@ export default function TeaParty({
       })
       .catch((error) => {
         console.log(error);
+        alert("Error Fetching NKN Address: " + error);
       }
       );
   }
@@ -311,9 +315,13 @@ export default function TeaParty({
       private: privateSell,
     }).then((response) => {
       console.log(response.data);
-      // base64 decode the response
+      // base64 decode the response]
+      alert("Sell Order Created: " + response.data.txid)
       setSellOrderResponse(response.data);
       listOrders();
+    }).catch((error) => {
+      console.log(error);
+      alert("Error Creating Sell Order.. Dont forget to pay your transaction fees: " + error);
     });
   }
 
@@ -344,6 +352,9 @@ export default function TeaParty({
       // TODO:: display user facing error/success message
       console.log(response.data);
       alert(response.data);
+    }).catch((error) => {
+      console.log(error);
+      alert("Error Buying Order.. Dont forget to pay your transaction fees: " + error);
     });
   }
 
@@ -374,6 +385,9 @@ export default function TeaParty({
       // TODO:: display user facing error/success message
       console.log(response.data);
       alert(response.data);
+    }).catch((error) => {
+      console.log(error);
+      alert("Error Buying Order.. Dont forget to pay your transaction fees: " + error);
     });
   }
 
