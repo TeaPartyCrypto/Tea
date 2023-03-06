@@ -823,9 +823,6 @@ export default function TeaParty({
                                   <Dropdown.Item onClick={() => setTradeAsset("radiant")}>Radiant</Dropdown.Item> */}
                                     <Dropdown.Item onClick={() => setTradeAsset("celo")}><img src={returnLogo("celo")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Celo</span></Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setTradeAsset("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setTradeAsset("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setTradeAsset("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
                                   </Dropdown.Menu>
                                 </Dropdown>
                               </div>
