@@ -118,7 +118,7 @@ export default function TeaParty({
         if (update && (update.status === "confirmed" || update.status === 1)) {
           console.log(" 🍾 Transaction " + update.hash + " finished!");
           console.log(update.data);
-          alert(web3.utils.hexToNumber(update.data));
+          alert("Transaction Confirmed! You may now place a trade order.");
           console.log(
             " ⛽️ " +
             update.gasUsed +
@@ -316,7 +316,7 @@ export default function TeaParty({
     }).then((response) => {
       console.log(response.data);
       // base64 decode the response]
-      alert("Sell Order Created: " + response.data.txid)
+      alert("Sell Order Created")
       setSellOrderResponse(response.data);
       listOrders();
     }).catch((error) => {
