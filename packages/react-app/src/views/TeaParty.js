@@ -244,6 +244,29 @@ export default function TeaParty({
       );
   }
 
+  const assistedSell = async () => {
+    const amt = parseInt(web3.utils.toWei(amount, "ether"));
+    const prc = parseInt(web3.utils.toWei(price, "ether"));
+
+    axios.post('/sell', {
+      currency: currency,
+      amount: amt,
+      tradeAsset: tradeAsset,
+      price: prc,
+      onChain: true,
+      assisted: true
+    })
+      .then((response) => {
+        // stringify the response
+        const stringifiedResponse = JSON.stringify(response.data);
+        alert("Assisted Sell Transaction Sent. Please fund this escrow account:" + stringifiedResponse);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Error Sending Assisted Sell Transaction: " + error);
+      }
+      );
+  }
 
   // /fetchopenorderbynkn
   // const fetchOpenOrderByNKN = async () => {
@@ -1133,6 +1156,8 @@ export default function TeaParty({
               </Form.Group>
               <p></p>
               <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={sell}>Sell</Button>
+              <p></p>
+              <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={assistedSell}>Assisted Sell</Button>
               <br />
               <span>
                 {sellOrderResponse}
