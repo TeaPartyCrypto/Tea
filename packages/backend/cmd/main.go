@@ -95,6 +95,7 @@ func main() {
 
 	http.HandleFunc("/", c.RootHandler)
 	http.HandleFunc("/sell", c.Sell)
+	http.HandleFunc("/assistedSell", c.AssistedSell)
 	http.HandleFunc("/list", c.ListOrders)
 	http.HandleFunc("/buy", c.Buy)
 	http.HandleFunc("/getNKNAddress", c.GetNKNAddress)

@@ -248,13 +248,15 @@ export default function TeaParty({
     const amt = parseInt(web3.utils.toWei(amount, "ether"));
     const prc = parseInt(web3.utils.toWei(price, "ether"));
 
-    axios.post('/sell', {
+    axios.post('/assistedsell', {
       currency: currency,
       amount: amt,
       tradeAsset: tradeAsset,
       price: prc,
       onChain: true,
-      assisted: true
+      assisted: true,
+      sellerShippingAddress: sellerShippingAddress,
+      refundAddress: sellersRefundAddress,
     })
       .then((response) => {
         // stringify the response
