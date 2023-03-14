@@ -37,11 +37,11 @@ type SellOrder struct {
 	// TradeAsset reflects the asset that the SELLER wishes to obtain. (bitcoin, mineonlium, USDT, etc).
 	TradeAsset string `json:"tradeAsset"`
 	// Price reflects the ammount of TradeAsset the SELLER requires.
-	Price *big.Int `json:"price"`
+	Price int `json:"price"`
 	// Currency reflects the currency that the SELLER wishes to trade. (bitcoin, mineonlium, USDT, etc).
 	Currency string `json:"currency"`
 	// Amount reflects the ammount of Currency the SELLER wishes to trade.
-	Amount *big.Int `json:"amount"`
+	Amount int `json:"amount"`
 	// TXID reflects the Transaction ID of the SELL order to be created.
 	TXID string `json:"txid"`
 	// Locked tells us if this transaction is pending/proccessing another payment.

@@ -138,7 +138,9 @@ func (c *Controller) Sell(w http.ResponseWriter, r *http.Request) {
 	}
 
 	io := bytes.NewBuffer(sellOrderJSON)
+
 	req, err := http.NewRequest("POST", c.SAASAddress+"/assistedSell", io)
+
 	if err != nil {
 		c.Log.Error("error creating http request", zap.Error(err))
 		w.WriteHeader(http.StatusBadRequest)
