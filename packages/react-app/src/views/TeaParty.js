@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState, useRef } from 'react';
 import { Button, Card, Col, Container, Form, Row, Dropdown, Toast, ToastContainer } from 'react-bootstrap';
 import web3 from 'web3';
-import moLogo from './logo/mo.svg';
+import gramsLogo from './logo/tp.jpeg';
 import octLogo from './logo/octa.png';
 import kasLogo from './logo/kaspa.png';
 import celoLogo from './logo/celo.png';
@@ -11,7 +11,6 @@ import btcLogo from './logo/btc.png';
 import polygonLogo from './logo/matic.png';
 import rxdLogo from './logo/rxd.png';
 import solLogo from './logo/sol.png';
-import ethOneLogo from './logo/etherone.png';
 import teaPartyLogo from './logo/teaparty.png';
 import usdtLogo from './logo/usdt.svg';
 import burgerLogo from './logo/burgler.png';
@@ -32,7 +31,7 @@ export default function TeaParty({
     address = "0x0000000000000000000000000000000000000000";
   }
 
-  const [tradeAsset, setTradeAsset] = useState("mineonlium");
+  const [tradeAsset, setTradeAsset] = useState("grams");
   const [amount, setAmount] = useState("1.2");
   const [currency, setCurrency] = useState("polygon");
   const [price, setPrice] = useState("1.5");
@@ -65,7 +64,7 @@ export default function TeaParty({
   const [showPendingPayOrders, setshowPendingPayOrders] = useState(false);
   const [showHomePage, setShowHomePage] = useState(true);
   const [showNav, setShowNav] = useState(true);
-  const [sortBy, setSortBy] = useState("mineonlium")
+  const [sortBy, setSortBy] = useState("grams")
 
   const [waitingToReconnect, setWaitingToReconnect] = useState(null);
   const clientRef = useRef(null);
@@ -79,8 +78,8 @@ export default function TeaParty({
   // take in an asset name and return the associated logo
   const returnLogo = (asset) => {
     switch (asset) {
-      case "mineonlium":
-        return moLogo;
+      case "grams":
+        return gramsLogo;
       case "kaspa":
         return kasLogo;
       case "celo":
@@ -97,8 +96,6 @@ export default function TeaParty({
         return solLogo;
       case "octa":
         return octLogo;
-      case "ethOne":
-        return ethOneLogo;
       case "bscUSDT":
         return usdtLogo;
       case "burger":
@@ -672,13 +669,12 @@ export default function TeaParty({
                 <Dropdown.Menu style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }}>
                   <Dropdown.Item onClick={() => setSortBy("polygon")}> <img src={returnLogo("polygon")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>  Polygon </span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("ethereum")}><img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" />  <span style={{ color: "#3EB489" }}> Ethereum</span> </Dropdown.Item>
-                  <Dropdown.Item onClick={() => setSortBy("mineonlium")}><img src={returnLogo("mineonlium")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> MineOnlium</span></Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSortBy("grams")}><img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Grams</span></Dropdown.Item>
                   {/* <Dropdown.Item onClick={() => setSortBy("kaspa")}>Kaspa</Dropdown.Item>
                 <Dropdown.Item onClick={() => setSortBy("radiant")}>Radiant</Dropdown.Item> */}
                   <Dropdown.Item onClick={() => setSortBy("celo")}><img src={returnLogo("celo")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Celo</span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
-                  <Dropdown.Item onClick={() => setSortBy("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
                   <Dropdown.Item onClick={() => show("private") & setSortBy("none")}><img src={returnLogo("tp")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Private</span></Dropdown.Item>
                 </Dropdown.Menu>
@@ -843,7 +839,7 @@ export default function TeaParty({
                                   <Dropdown.Menu style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }}>
                                     <Dropdown.Item onClick={() => setTradeAsset("polygon")}><img src={returnLogo("polygon")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}>  Polygon </span></Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("ethereum")}><img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Ethereum</span></Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setTradeAsset("mineonlium")}><img src={returnLogo("mineonlium")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> MineOnlium</span></Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setTradeAsset("grams")}><img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Grams</span></Dropdown.Item>
                                     {/* <Dropdown.Item onClick={() => setTradeAsset("kaspa")}>Kaspa</Dropdown.Item>
                                   <Dropdown.Item onClick={() => setTradeAsset("radiant")}>Radiant</Dropdown.Item> */}
                                     <Dropdown.Item onClick={() => setTradeAsset("celo")}><img src={returnLogo("celo")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Celo</span></Dropdown.Item>
@@ -956,13 +952,12 @@ export default function TeaParty({
                       <Dropdown.Menu style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }}>
                         <Dropdown.Item onClick={() => setCurrency("polygon")}><img src={returnLogo("polygon")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>  Polygon </span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("ethereum")}><img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>  Ethereum</span></Dropdown.Item>
-                        <Dropdown.Item onClick={() => setCurrency("mineonlium")}><img src={returnLogo("mineonlium")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> MineOnlium</span></Dropdown.Item>
+                        <Dropdown.Item onClick={() => setCurrency("grams")}><img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Grams</span></Dropdown.Item>
                         {/* <Dropdown.Item onClick={() => setCurrency("kaspa")}>Kaspa</Dropdown.Item>
                   <Dropdown.Item onClick={() => setCurrency("radiant")}>Radiant</Dropdown.Item> */}
                         <Dropdown.Item onClick={() => setCurrency("celo")}><img src={returnLogo("celo")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Celo</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
-                        <Dropdown.Item onClick={() => setCurrency("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
@@ -1032,11 +1027,10 @@ export default function TeaParty({
                       <Dropdown.Menu style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }}>
                         <Dropdown.Item onClick={() => setTradeAsset("polygon")}><img src={returnLogo("polygon")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>  Polygon </span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("ethereum")}><img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>  Ethereum</span></Dropdown.Item>
-                        <Dropdown.Item onClick={() => setTradeAsset("mineonlium")}><img src={returnLogo("mineonlium")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> MineOnlium</span></Dropdown.Item>
+                        <Dropdown.Item onClick={() => setTradeAsset("grams")}><img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Grams</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("celo")}><img src={returnLogo("celo")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Celo</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
-                        <Dropdown.Item onClick={() => setTradeAsset("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("ANY")}><img src={returnLogo("ANY")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>Any</span></Dropdown.Item>
                       </Dropdown.Menu>
