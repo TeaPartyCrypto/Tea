@@ -1,32 +1,43 @@
-name: Push to GCR GitHub Action
-on: 
+name: Build and Release
+
+on:
   push:
     branches:
       - main
-      - prod
 
 jobs:
-  # example with gcloud service account key
-  build-and-push-to-gcr-service-account:
-    name: Build & push - with service account
-    runs-on: ubuntu-latest
+  publish-images:
+    name: Build and publish images
+    runs-on: ubuntu-latest-8-cores
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Authenticate to Google Cloud
-        id: auth
-        uses: google-github-actions/auth@v0
-        with:
-          credentials_json: '${{ secrets.B64_GCLOUD_SERVICE_ACCOUNT_JSON }}'
-          path: main
-      - name: Building and pushing the image
-        #uses: ./
-        uses: RafikFarhad/push-to-gcr-github-action@v5-beta # <- use this on your workflow
-        with:
-          gcloud_service_key: ${{ secrets.JSON_GCLOUD_SERVICE_ACCOUNT_JSON }} # <- not needed when used with google-github-actions/auth@v0
-          registry: gcr.io
-          project_id: mineonlium
-          image_name: tea
-          image_tag: tea
-          dockerfile: ./packages/backend/Dockerfile
-          context: /packages/backend/
-          target: build
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Login to GCR
+      uses: docker/login-action@v2
+      with:
+        registry: gcr.io
+        username: _json_key
+        password: ${{ secrets.GCLOUD_GCR_SERVICEACCOUNT_KEY }}
+
+    - name: Set IMAGE_TAG
+      id: image-tag
+      run: |
+        IMAGE_TAG=${GITHUB_SHA}
+        [[ ${GITHUB_REF_TYPE} == "tag" ]] && IMAGE_TAG=${GITHUB_REF_NAME}
+        echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+    - name: Publish container images to GCR
+      env:
+        KO_DOCKER_REPO: gcr.io/mineonlium
+        KOFLAGS: --jobs=8 --platform=linux/amd64,linux/arm64,linux/ppc64le --push=${{ github.event_name != 'pull_request' }}
+        DIST_DIR: /tmp/dist
+      run: |
+        make image
+        done
+    - name: Upload artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: manifests
+        path: /tmp/dist
+        retention-days: 14
