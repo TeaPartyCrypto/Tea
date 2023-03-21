@@ -3,9 +3,8 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+      - prod
+
 jobs:
   # example with gcloud service account key
   build-and-push-to-gcr-service-account:
