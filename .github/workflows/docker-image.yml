@@ -26,7 +26,7 @@ jobs:
           registry: gcr.io
           project_id: mineonlium
           image_name: tea
-          image_tag: tea-${{ github.sha }}, ${{ github.sha }}
+          image_tag: tea
           dockerfile: ./packages/backend/Dockerfile
-          context: ./packages/backend/
+          context: /packages/backend/
           target: build
