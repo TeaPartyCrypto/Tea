@@ -2,10 +2,10 @@ name: Push to GCR GitHub Action
 on: 
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 jobs:
   # example with gcloud service account key
   build-and-push-to-gcr-service-account:
