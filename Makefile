@@ -8,7 +8,7 @@ prod:
 	@cd packages/backend && make prod
 
 build:
-	@cd packages/backend && yarn i && make build
+	@cd packages/backend && yarn  && make build
 
 release:
 	@cd packages/backend && make release
