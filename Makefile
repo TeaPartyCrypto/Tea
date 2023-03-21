@@ -4,6 +4,9 @@ run:
 staging:
 	@cd packages/backend && make staging
 
+prod:
+	@cd packages/backend && make prod
+
 build:
 	@cd packages/backend && make build
 

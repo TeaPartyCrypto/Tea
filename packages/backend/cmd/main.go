@@ -81,7 +81,7 @@ func main() {
 	c.SAASAddress = os.Getenv("SAAS_ADDRESS")
 
 	if c.SAASAddress == "" {
-		c.SAASAddress = "http://34.172.60.163:8080"
+		c.SAASAddress = "https://teaparty-adams.ngrok.io"
 	}
 
 	// create a new sugard logger
@@ -95,6 +95,7 @@ func main() {
 
 	http.HandleFunc("/", c.RootHandler)
 	http.HandleFunc("/sell", c.Sell)
+	http.HandleFunc("/assistedSell", c.AssistedSell)
 	http.HandleFunc("/list", c.ListOrders)
 	http.HandleFunc("/buy", c.Buy)
 	http.HandleFunc("/getNKNAddress", c.GetNKNAddress)
@@ -104,5 +105,4 @@ func main() {
 	http.HandleFunc("/ws", c.SocketHandler)
 	log.Println("Listening on :8081")
 	http.ListenAndServe(":8081", nil)
-
 }

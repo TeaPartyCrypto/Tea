@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState, useRef } from 'react';
 import { Button, Card, Col, Container, Form, Row, Dropdown, Toast, ToastContainer } from 'react-bootstrap';
 import web3 from 'web3';
-import moLogo from './logo/mo.svg';
+import gramsLogo from './logo/tp.jpeg';
 import octLogo from './logo/octa.png';
 import kasLogo from './logo/kaspa.png';
 import celoLogo from './logo/celo.png';
@@ -11,7 +11,6 @@ import btcLogo from './logo/btc.png';
 import polygonLogo from './logo/matic.png';
 import rxdLogo from './logo/rxd.png';
 import solLogo from './logo/sol.png';
-import ethOneLogo from './logo/etherone.png';
 import teaPartyLogo from './logo/teaparty.png';
 import usdtLogo from './logo/usdt.svg';
 import burgerLogo from './logo/burgler.png';
@@ -32,7 +31,7 @@ export default function TeaParty({
     address = "0x0000000000000000000000000000000000000000";
   }
 
-  const [tradeAsset, setTradeAsset] = useState("mineonlium");
+  const [tradeAsset, setTradeAsset] = useState("grams");
   const [amount, setAmount] = useState("1.2");
   const [currency, setCurrency] = useState("polygon");
   const [price, setPrice] = useState("1.5");
@@ -44,9 +43,13 @@ export default function TeaParty({
   const [buyerShippingAddress, setBuyerShippingAddress] = useState("0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3");
   const [buyersRefundAddress, setBuyersRefundAddress] = useState("0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3");
   const [sellersRefundAddress, setSellersRefundAddress] = useState("0x5bbfa5724260Cb175cB39b24802A04c3bfe72eb3");
+  const [privateSell, setPrivateSell] = useState(false);
   const [userCurrentPendingPayOrders, setuserCurrentPendingPayOrders] = useState([]);
   const [pendingPayNumberAmmount, setPendingPayNumberAmmount] = useState(0);
   const [userPrivateKeys, setUserPrivateKeys] = useState([]);
+  const [showPrivateBuy, setShowPrivateBuy] = useState(false);
+  const [tradeInfo, setTradeInfo] = useState(false);
+  const [orderId, setOrderId] = useState("");
 
   const [currentOpenOrders, setCurrentOpenOrders] = useState();
   const [sellOrderResponse, setSellOrderResponse] = useState("");
@@ -61,7 +64,7 @@ export default function TeaParty({
   const [showPendingPayOrders, setshowPendingPayOrders] = useState(false);
   const [showHomePage, setShowHomePage] = useState(true);
   const [showNav, setShowNav] = useState(true);
-  const [sortBy, setSortBy] = useState("mineonlium")
+  const [sortBy, setSortBy] = useState("grams")
 
   const [waitingToReconnect, setWaitingToReconnect] = useState(null);
   const clientRef = useRef(null);
@@ -75,8 +78,8 @@ export default function TeaParty({
   // take in an asset name and return the associated logo
   const returnLogo = (asset) => {
     switch (asset) {
-      case "mineonlium":
-        return moLogo;
+      case "grams":
+        return gramsLogo;
       case "kaspa":
         return kasLogo;
       case "celo":
@@ -93,8 +96,6 @@ export default function TeaParty({
         return solLogo;
       case "octa":
         return octLogo;
-      case "ethOne":
-        return ethOneLogo;
       case "bscUSDT":
         return usdtLogo;
       case "burger":
@@ -114,7 +115,7 @@ export default function TeaParty({
         if (update && (update.status === "confirmed" || update.status === 1)) {
           console.log(" 🍾 Transaction " + update.hash + " finished!");
           console.log(update.data);
-          alert(web3.utils.hexToNumber(update.data));
+          alert("Transaction Confirmed! You may now place a trade order.");
           console.log(
             " ⛽️ " +
             update.gasUsed +
@@ -130,7 +131,6 @@ export default function TeaParty({
     console.log("awaiting metamask/web3 confirm result...", result);
 
   }
-
 
 
   useEffect(() => {
@@ -215,6 +215,7 @@ export default function TeaParty({
         return response.data;
       })
       .catch((error) => {
+        alert("Error Fetching Private Keys: " + error);
         console.log(error);
       }
       );
@@ -235,10 +236,36 @@ export default function TeaParty({
       })
       .catch((error) => {
         console.log(error);
+        alert("Error Deleting Private Key: " + error);
       }
       );
   }
 
+  const assistedSell = async () => {
+    const amt = parseInt(web3.utils.toWei(amount, "ether"));
+    const prc = parseInt(web3.utils.toWei(price, "ether"));
+
+    axios.post('/assistedsell', {
+      currency: currency,
+      amount: amt,
+      tradeAsset: tradeAsset,
+      price: prc,
+      onChain: true,
+      assisted: true,
+      sellerShippingAddress: sellerShippingAddress,
+      refundAddress: sellersRefundAddress,
+    })
+      .then((response) => {
+        // stringify the response
+        const stringifiedResponse = JSON.stringify(response.data);
+        alert("Assisted Sell Transaction Sent. Please fund this escrow account:" + stringifiedResponse);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Error Sending Assisted Sell Transaction: " + error);
+      }
+      );
+  }
 
   // /fetchopenorderbynkn
   // const fetchOpenOrderByNKN = async () => {
@@ -271,6 +298,7 @@ export default function TeaParty({
       })
       .catch((error) => {
         console.log(error);
+        alert("Error Fetching Open Orders: " + error);
       }
       );
   }
@@ -285,6 +313,7 @@ export default function TeaParty({
       })
       .catch((error) => {
         console.log(error);
+        alert("Error Fetching NKN Address: " + error);
       }
       );
   }
@@ -305,10 +334,16 @@ export default function TeaParty({
       sellerNKNAddress: myNKNAddress,
       paymentTransactionID: address,
       refundAddress: sellersRefundAddress,
+      private: privateSell,
     }).then((response) => {
       console.log(response.data);
+      // base64 decode the response]
+      alert("Sell Order Created")
       setSellOrderResponse(response.data);
       listOrders();
+    }).catch((error) => {
+      console.log(error);
+      alert("Error Creating Sell Order.. Dont forget to pay your transaction fees: " + error);
     });
   }
 
@@ -324,6 +359,10 @@ export default function TeaParty({
       return;
     }
 
+    // remove the order from the current open orders
+    const newCurrentOpenOrders = currentOpenOrders.filter((order) => order.txid !== id);
+    setCurrentOpenOrders(newCurrentOpenOrders);
+
     axios.post('/buy', {
       txid: id,
       buyerNKNAddress: myNKNAddress,
@@ -334,8 +373,46 @@ export default function TeaParty({
     }).then((response) => {
       // TODO:: display user facing error/success message
       console.log(response.data);
+      alert(response.data);
+    }).catch((error) => {
+      console.log(error);
+      alert("Error Buying Order.. Dont forget to pay your transaction fees: " + error);
     });
   }
+
+  // /privatebuy
+  const privatebuy = async () => {
+    console.log("buying: " + orderId);
+    if (myNKNAddress === "") {
+      await getNKNAddress()
+    }
+
+    if (orderId === "") {
+      alert("Please select an order to buy");
+      return;
+    }
+
+    // remove the order from the current open orders
+    const newCurrentOpenOrders = currentOpenOrders.filter((order) => order.txid !== orderId);
+    setCurrentOpenOrders(newCurrentOpenOrders);
+
+    axios.post('/buy', {
+      txid: orderId,
+      buyerNKNAddress: myNKNAddress,
+      buyerShippingAddress: buyerShippingAddress,
+      paymentTransactionID: address,
+      refundAddress: buyersRefundAddress,
+      tradeAsset: tradeAsset,
+    }).then((response) => {
+      // TODO:: display user facing error/success message
+      console.log(response.data);
+      alert(response.data);
+    }).catch((error) => {
+      console.log(error);
+      alert("Error Buying Order.. Dont forget to pay your transaction fees: " + error);
+    });
+  }
+
 
   // show is called to select a block for the user to view
   const show = (blockName) => {
@@ -346,6 +423,7 @@ export default function TeaParty({
         setShowBuyOrder(false);
         setShowPrivateKeys(false);
         setShowHomePage(false);
+        setShowPrivateBuy(false);
         return
       case "pk":
         setShowBrowseOrders(false);
@@ -353,6 +431,7 @@ export default function TeaParty({
         setShowBuyOrder(false);
         setShowPrivateKeys(true);
         setShowHomePage(false);
+        setShowPrivateBuy(false);
         return
       case "sell":
         setShowBrowseOrders(false);
@@ -360,6 +439,7 @@ export default function TeaParty({
         setShowBuyOrder(true);
         setShowPrivateKeys(false);
         setShowHomePage(false);
+        setShowPrivateBuy(false);
         return
       case "payorder":
         setShowBrowseOrders(false);
@@ -367,6 +447,7 @@ export default function TeaParty({
         setShowBuyOrder(false);
         setShowPrivateKeys(false);
         setShowHomePage(false);
+        setShowPrivateBuy(false);
         return
       case "home":
         setShowBrowseOrders(false);
@@ -375,6 +456,12 @@ export default function TeaParty({
         setShowPrivateKeys(false);
         setShowHomePage(true);
         return
+      case "private":
+        setShowPrivateBuy(true);
+        setShowBrowseOrders(true);
+        setshowPendingPayOrders(false);
+        setShowBuyOrder(false);
+        setShowHomePage(false);
       case "nav":
         setShowNav(!showNav);
     }
@@ -582,18 +669,61 @@ export default function TeaParty({
                 <Dropdown.Menu style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }}>
                   <Dropdown.Item onClick={() => setSortBy("polygon")}> <img src={returnLogo("polygon")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>  Polygon </span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("ethereum")}><img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" />  <span style={{ color: "#3EB489" }}> Ethereum</span> </Dropdown.Item>
-                  <Dropdown.Item onClick={() => setSortBy("mineonlium")}><img src={returnLogo("mineonlium")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> MineOnlium</span></Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSortBy("grams")}><img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Grams</span></Dropdown.Item>
                   {/* <Dropdown.Item onClick={() => setSortBy("kaspa")}>Kaspa</Dropdown.Item>
                 <Dropdown.Item onClick={() => setSortBy("radiant")}>Radiant</Dropdown.Item> */}
                   <Dropdown.Item onClick={() => setSortBy("celo")}><img src={returnLogo("celo")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Celo</span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
-                  <Dropdown.Item onClick={() => setSortBy("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
-
+                  <Dropdown.Item onClick={() => show("private") & setSortBy("none")}><img src={returnLogo("tp")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Private</span></Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={listOrders}>Refresh</Button>
+              {/* Show Private Buy Pannel that allows the user to initate a trade by providing a order ID */}
+              {showPrivateBuy ?
+                <Card.Body>
+                  <Form>
+                    <Form.Group controlId="formOrderId">
+                      <Row>
+                        <Col
+                          style={{
+                            marginTop: '1rem',
+                            marginBottom: '1rem',
+                            boarder: 'dark',
+                            padding: '1rem',
+                            width: 'auto',
+                            textAlign: 'right',
+                            margin: 'auto'
+                          }}>
+                          <Form.Label>Order ID</Form.Label>
+                        </Col>
+                        <Col
+
+                          style={{
+                            marginTop: '1rem',
+                            marginBottom: '1rem',
+                            boarder: 'dark',
+                            padding: '1rem',
+                            width: 'auto',
+                            contentAlign: 'center',
+                            margin: 'auto'
+                          }}>
+                          <Form.Control style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="" onChange={(e) => setOrderId(e.target.value)} />
+                        </Col>
+                      </Row>
+                    </Form.Group>
+                    <p></p>
+                    {/* <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={fetchTradeInfo}>Fetch Trade Info</Button> */}
+                    <p></p>
+                    <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={privatebuy}>Buy</Button>
+                    <br />
+                    {/* Show trade info once button is clicked */}
+
+                  </Form>
+                </Card.Body>
+                : null}
+
               {currentOpenOrders.map((order) => (
                 <Card style={{
                   backgroundColor: '#282c34',
@@ -686,8 +816,6 @@ export default function TeaParty({
                               onChange={(e) => setBuyersRefundAddress(e.target.value)} />
                             <input style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="Buyers Shipping Address"
                               onChange={(e) => setBuyerShippingAddress(e.target.value)} />
-                            <input style={{ background: "#023020", color: '#3EB489' }} type="text" placeholder="Buyers Payment Transaction ID"
-                              onChange={(e) => setBuyersPaymentTransactionID(e.target.value)} />
                             {order.tradeAsset === "ANY" ?
                               <div
                                 style={{
@@ -711,14 +839,11 @@ export default function TeaParty({
                                   <Dropdown.Menu style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }}>
                                     <Dropdown.Item onClick={() => setTradeAsset("polygon")}><img src={returnLogo("polygon")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}>  Polygon </span></Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("ethereum")}><img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Ethereum</span></Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setTradeAsset("mineonlium")}><img src={returnLogo("mineonlium")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> MineOnlium</span></Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setTradeAsset("grams")}><img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Grams</span></Dropdown.Item>
                                     {/* <Dropdown.Item onClick={() => setTradeAsset("kaspa")}>Kaspa</Dropdown.Item>
                                   <Dropdown.Item onClick={() => setTradeAsset("radiant")}>Radiant</Dropdown.Item> */}
                                     <Dropdown.Item onClick={() => setTradeAsset("celo")}><img src={returnLogo("celo")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Celo</span></Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setTradeAsset("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setTradeAsset("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setTradeAsset("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /><span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
                                   </Dropdown.Menu>
                                 </Dropdown>
                               </div>
@@ -730,7 +855,7 @@ export default function TeaParty({
                               } else {
                                 setTradeAsset(order.tradeAsset)
                               }
-                              
+
                               buy(order.txid)
                             }}>Buy</Button>
                           </Card>
@@ -827,13 +952,12 @@ export default function TeaParty({
                       <Dropdown.Menu style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }}>
                         <Dropdown.Item onClick={() => setCurrency("polygon")}><img src={returnLogo("polygon")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>  Polygon </span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("ethereum")}><img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>  Ethereum</span></Dropdown.Item>
-                        <Dropdown.Item onClick={() => setCurrency("mineonlium")}><img src={returnLogo("mineonlium")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> MineOnlium</span></Dropdown.Item>
+                        <Dropdown.Item onClick={() => setCurrency("grams")}><img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Grams</span></Dropdown.Item>
                         {/* <Dropdown.Item onClick={() => setCurrency("kaspa")}>Kaspa</Dropdown.Item>
                   <Dropdown.Item onClick={() => setCurrency("radiant")}>Radiant</Dropdown.Item> */}
                         <Dropdown.Item onClick={() => setCurrency("celo")}><img src={returnLogo("celo")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Celo</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
-                        <Dropdown.Item onClick={() => setCurrency("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
@@ -903,11 +1027,10 @@ export default function TeaParty({
                       <Dropdown.Menu style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }}>
                         <Dropdown.Item onClick={() => setTradeAsset("polygon")}><img src={returnLogo("polygon")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>  Polygon </span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("ethereum")}><img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>  Ethereum</span></Dropdown.Item>
-                        <Dropdown.Item onClick={() => setTradeAsset("mineonlium")}><img src={returnLogo("mineonlium")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> MineOnlium</span></Dropdown.Item>
+                        <Dropdown.Item onClick={() => setTradeAsset("grams")}><img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Grams</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("celo")}><img src={returnLogo("celo")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Celo</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("solana")}><img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Solana</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("octa")}><img src={returnLogo("octa")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> Octa</span></Dropdown.Item>
-                        <Dropdown.Item onClick={() => setTradeAsset("ethOne")}><img src={returnLogo("ethOne")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> ETHOne</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("bscUSDT")}><img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}> BSC-USDT</span></Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("ANY")}><img src={returnLogo("ANY")} alt="Tea Party Logo" width="25" height="25" /> <span style={{ color: "#3EB489" }}>Any</span></Dropdown.Item>
                       </Dropdown.Menu>
@@ -999,8 +1122,38 @@ export default function TeaParty({
                   </Col>
                 </Row>
               </Form.Group>
+              <Form.Group controlId="privateSell">
+                <Row>
+                  <Col
+                    style={{
+                      marginTop: '1rem',
+                      marginBottom: '1rem',
+                      boarder: 'dark',
+                      padding: '1rem',
+                      width: 'auto',
+                      textAlign: 'right',
+                      margin: 'auto'
+                    }}>
+                    <Form.Label>Private Sell</Form.Label>
+                  </Col>
+                  <Col
+                    style={{
+                      marginTop: '1rem',
+                      marginBottom: '1rem',
+                      boarder: 'dark',
+                      padding: '1rem',
+                      width: 'auto',
+                      textAlign: 'left',
+                      margin: 'auto'
+                    }}>
+                    <Form.Check type="checkbox" onChange={(e) => setPrivateSell(e.target.checked)} />
+                  </Col>
+                </Row>
+              </Form.Group>
               <p></p>
               <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={sell}>Sell</Button>
+              <p></p>
+              <Button style={{ backgroundColor: "#023020", color: "#3EB489", fontWeight: "bold" }} variant="secondary" onClick={assistedSell}>Assisted Sell</Button>
               <br />
               <span>
                 {sellOrderResponse}
@@ -1061,6 +1214,10 @@ export default function TeaParty({
             </Card>
           </Card.Body>
           : null}
+
+
+
+
 
 
         {/* Show Private Keys */}

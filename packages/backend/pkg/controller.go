@@ -138,7 +138,9 @@ func (c *Controller) Sell(w http.ResponseWriter, r *http.Request) {
 	}
 
 	io := bytes.NewBuffer(sellOrderJSON)
+
 	req, err := http.NewRequest("POST", c.SAASAddress+"/sell", io)
+
 	if err != nil {
 		c.Log.Error("error creating http request", zap.Error(err))
 		w.WriteHeader(http.StatusBadRequest)
@@ -173,10 +175,97 @@ func (c *Controller) Sell(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// convert the response body to a string
+	bodyString := string(body)
+
 	// return accepted to the client
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
-	json.NewEncoder(w).Encode("sell order accepted")
+	json.NewEncoder(w).Encode(bodyString)
+}
+
+// Sell is a http route handler that accepts a sell order
+// sell orders are stored in an on prem MongoDB database
+func (c *Controller) AssistedSell(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	c.Log.Debug("received sell order")
+
+	sellOrder := &SellOrder{}
+	err := json.NewDecoder(r.Body).Decode(sellOrder)
+	if err != nil {
+		c.Log.Error("error decoding sell order", zap.Error(err))
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// TODO: verify that sellOrder.Amount != nil
+	// verify that all fields are not empty
+	if sellOrder.Currency == "" || sellOrder.TradeAsset == "" {
+		c.Log.Error("error: currency or trade asset is empty on sell order ID " + sellOrder.TXID)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("invalid sell order, currency or trade asset is empty")
+		return
+	}
+
+	// generate a random string to be used as the transaction ID
+	sellOrder.TXID = uuid.New().String()
+	// add the NKN address to the sell order
+	sellOrder.SellerNKNAddress = c.NKNClient.Address()
+	// prepare sellOrder to send in the http request
+	sellOrderJSON, err := json.Marshal(sellOrder)
+	if err != nil {
+		c.Log.Error("error marshalling sell order", zap.Error(err))
+		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	io := bytes.NewBuffer(sellOrderJSON)
+
+	req, err := http.NewRequest("POST", c.SAASAddress+"/assistedSell", io)
+
+	if err != nil {
+		c.Log.Error("error creating http request", zap.Error(err))
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("error creating http request")
+		return
+	}
+
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		c.Log.Error("error sending sell order to Party", zap.Error(err))
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("error sending sell order to Party")
+		return
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		c.Log.Error("error reading response body from Party", zap.Error(err))
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("error reading response body from Party")
+		return
+	}
+
+	if resp.StatusCode != 202 {
+		c.Log.Error("error: status code is not 202")
+		c.Log.Info("response body from Party: ", zap.String("body", string(body)))
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("error: resposne code from Party was not a 202.. Please check tea's backend service logs for more information. Response from Party was: " + string(body))
+		return
+	}
+
+	// convert the response body to a string
+	bodyString := string(body)
+
+	// return accepted to the client
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
+	json.NewEncoder(w).Encode(bodyString)
 }
 
 func (c *Controller) ListOrders(w http.ResponseWriter, r *http.Request) {
