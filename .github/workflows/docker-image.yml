@@ -19,7 +19,7 @@ jobs:
       uses: 'google-github-actions/auth@v1'
       with:
        # workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-        service_account: 'container-registry@fit-stream-305821.iam.gserviceaccount.com'
+        service_account: 'adminbuild@fit-stream-305821.iam.gserviceaccount.com'
         project_id: mineonlium
         credentials_json: ${{ secrets.GCLOUD_GCR_SERVICEACCOUNT_KEY }}
         
