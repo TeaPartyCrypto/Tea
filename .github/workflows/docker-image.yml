@@ -23,15 +23,9 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: gcr.io
-        username: _json_key
+        username: workflow-containers
         password: ${{ secrets.GCLOUD_GCR_SERVICEACCOUNT_KEY }}
 
-    - name: Set IMAGE_TAG
-      id: image-tag
-      run: |
-        IMAGE_TAG=${GITHUB_SHA}
-        [[ ${GITHUB_REF_TYPE} == "tag" ]] && IMAGE_TAG=${GITHUB_REF_NAME}
-        echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_OUTPUT
     - name: Publish container images to GCR
       env:
         KO_DOCKER_REPO: gcr.io/mineonlium
