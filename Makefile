@@ -15,4 +15,4 @@ debug:
 	@make run
 
 image:
-	@cd packages/backend && gcloud builds submit --tag gcr.io/mineonlium/tea --project mineonlium --impersonate-service-account
+	@cd packages/backend && gcloud builds submit --tag gcr.io/mineonlium/tea --project mineonlium 
