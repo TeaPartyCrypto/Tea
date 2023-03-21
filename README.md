@@ -7,7 +7,6 @@ The application interface for `TeaParty`
 </p>
 </p>
 
-
 ## Design / Overview
 
 `TeaParty` consists of two core parts `tea` & `party`, as illustrated by the diagram below. 
