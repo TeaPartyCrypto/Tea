@@ -28,5 +28,5 @@ jobs:
           image_name: tea
           image_tag: tea-${{ github.sha }}, ${{ github.sha }}
           dockerfile: ./packages/backend/Dockerfile
-          context: .
+          context: ./packages/backend/
           target: build
