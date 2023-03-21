@@ -39,10 +39,4 @@ jobs:
         DIST_DIR: /tmp/dist
       run: |
         make image
-        done
-    - name: Upload artifact
-      uses: actions/upload-artifact@master
-      with:
-        name: manifests
-        path: /tmp/dist
-        retention-days: 14
+
