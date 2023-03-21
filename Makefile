@@ -15,5 +15,4 @@ debug:
 	@make run
 
 image:
-	@make build
 	@cd packages/backend && gcloud builds submit --tag gcr.io/mineonlium/tea
