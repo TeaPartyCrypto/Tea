@@ -30,7 +30,7 @@ After starting the NKN connection, `tea` also begins serving the static assets l
 ### Current Supported Assets
 
 `TeaParty` currently supports the trade of the following assets:
-* MineOnlium
+* PartyChain
 * Ethereum
 * EthOne
 * Octa
@@ -68,7 +68,7 @@ I am currently in the process of introducing the following assets into `TeaParty
 
        * Celo: Alfajores ([faucet](https://celo.org/developers/faucet))
 
-       * MO: Mainnet (Soon to be testnet with faucet) 
+       * GRAMS: Mainnet
       
        * OCTA: Mainnet
 
@@ -76,7 +76,7 @@ I am currently in the process of introducing the following assets into `TeaParty
 
 1. The watch timeout has been taken down to 300 secconds from 2 hours ( After 300 secconds any pending transaction will fail) 
 
-1. Currently, users still have to pay for the transaction fees ( I will personally reimburse any and all MO costs incurred while playing on testnet untill the faucet is setup. 
+1. Currently, users still have to pay for the transaction fees ( I will personally reimburse any and all GRAMS costs incurred while playing on testnet untill the faucet is setup. 
 
 
 ### System Prerequisites for Running `tea`
@@ -95,7 +95,7 @@ Here are a few things you can currently do with `tea`:
 * Create new orders. 
 * View acquired Private Keys.
 * Remove acquired Private Keys from the local filesystem. 
-* Interact with the `TeaParty` smart contract to pay for transaction fees, currently set @ 1 MO/ Transaction. ( **NOTE:** ALL MO Accounts with a balance over 17k have FREE access to Buy and Sell with `TeaParty`) 
+* Interact with the `TeaParty` smart contract to pay for transaction fees, currently set @ 1 GRAMS/ Transaction.
 
 
 ## Quickstart `tea` 
@@ -112,6 +112,10 @@ Linux:
 git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && cd release && xdg-open http://localhost:8081 && ./linux
 ```
 
+Windows:
+```
+git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && cd release && start http://localhost:8081 && ./windows.exe
+```
 
 
 ### Start `tea` from a release
@@ -170,7 +174,7 @@ Interested? Try:
 
 * [Submiting](https://github.com/TeaPartyCrypto/Tea/pulls) a PR. 
 * [Creating](https://github.com/TeaPartyCrypto/Tea/issues) an issue!
-* Join the MineOnlium [Discord](https://discord.gg/4JFjejV4FN).
+* Join the TeaParty [Discord](https://discord.gg/4JFjejV4FN).
 * PM me on Discord @ Filth#5858 (439229993625714688).
 
 ## Backend Interactions 
@@ -185,7 +189,7 @@ Interested? Try:
 | tradeAsset   |   The asset the seller wishes to obtain       |
 | price   | The quantity of `tradeAsset` the seller wishes to obtain        |
 | sellerShippingAddress   | An address on the `tradeAsset` network that the seller wishes to recieve payment on   |
-| paymentTransactionID   | The Users Address on the MO Blockchain that has paid for a `TeaParty` transaction via the smart contract. |
+| paymentTransactionID   | The Users Address on the PartyChain that has paid for a `TeaParty` transaction via the smart contract. |
 
 Example curl request:
 ```cmd
@@ -211,7 +215,7 @@ curl -v "http://localhost:8081/list"
 | ----------- | ----------- |
 | txid      | A Transaction ID for the order in question.     |
 | buyerShippingAddress      | An address on the `tradeAsset` network that the buyer wishes to recieve payment on.    |
-| paymentTransactionID      |  The Users Address on the MO Blockchain that has paid for a `TeaParty` transaction via the smart contract.   |
+| paymentTransactionID      |  The Users Address on the PartyChain that has paid for a `TeaParty` transaction via the smart contract.   |
 
 Example curl request:
 ```cmd
