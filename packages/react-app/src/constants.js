@@ -46,22 +46,12 @@ export const NETWORKS = {
     blockExplorer: "https://goerli.etherscan.io/",
     rpcUrl: `https://goerli.infura.io/v3/${INFURA_ID}`,
   },
-  mineonlium: {
-    name: "mineonlium",
+  partychain: {
+    name: "partychain",
     color: "#666666",
-    chainId: 54321,
-    blockExplorer: "https://mo-scout.com",
-    rpcUrl: "http://rpc.mo-scout.com ",
-  },
-  xdai: {
-    name: "xdai",
-    color: "#48a9a6",
-    chainId: 100,
-    price: 1,
-    gasPrice: 1000000000,
-    rpcUrl: "https://dai.poa.network",
-    faucet: "https://xdai-faucet.top/",
-    blockExplorer: "https://blockscout.com/poa/xdai/",
+    chainId: 1773,
+    blockExplorer: "https://partyexplorer.co",
+    rpcUrl: "https://tea.mining4people.com/rpc",
   },
   polygon: {
     name: "polygon",
