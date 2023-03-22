@@ -98,6 +98,22 @@ Here are a few things you can currently do with `tea`:
 * Interact with the `TeaParty` smart contract to pay for transaction fees, currently set @ 1 MO/ Transaction. ( **NOTE:** ALL MO Accounts with a balance over 17k have FREE access to Buy and Sell with `TeaParty`) 
 
 
+## Quickstart `tea` 
+
+The quickest way to get going with `tea` is by executing one of the following commands (Only OSX and Linux is supported at the moment and require `git`)
+
+OSX (amd64):
+```
+git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && git checkout master && git pull && cd release && ./mac
+```
+
+Linux:
+```
+git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && git checkout master && git pull && cd release && ./linux
+```
+
+
+
 ### Start `tea` from a release
 Releases can be downloaded from the releases on the right side of the homepage of this repository on github. Or the most current build is always avalible in the `release` directory. 
 
