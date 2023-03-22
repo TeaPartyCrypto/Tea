@@ -100,7 +100,10 @@ Here are a few things you can currently do with `tea`:
 
 ## Quickstart `tea` 
 
+
 The quickest way to get going with `tea` is by executing one of the following commands (Only OSX and Linux is supported at the moment and require `git`)
+
+!!NOTE!! the `quickstart` method will point you to a production release of `tea` I.E. Mainnet RPC's are used here, unlike the rest of the methods below that are on testnet. 
 
 OSX (amd64):
 ```
