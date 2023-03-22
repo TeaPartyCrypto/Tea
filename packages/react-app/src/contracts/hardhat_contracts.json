@@ -1,12 +1,39 @@
 {
-  "54321": {
-    "mineonlium": {
-      "name": "mineonlium",
-      "chainId": "54321",
+  "1773": {
+    "partychain": {
+      "name": "partychain",
+      "chainId": "1773",
       "contracts": {
         "TeaParty": {
-          "address": "0xa872Ea12BE8CFA4D56dAd9021D94250B82786441",
+          "address": "0xDAD416F84E67d4B37c12c37979DC4E8d07Fc83d2",
           "abi": [
+            {
+              "inputs": [],
+              "name": "addHolder",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "createTransaction",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "payable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "deposit",
+              "outputs": [],
+              "stateMutability": "payable",
+              "type": "function"
+            },
             {
               "anonymous": false,
               "inputs": [
@@ -27,34 +54,15 @@
               "type": "event"
             },
             {
-              "inputs": [],
-              "name": "purchaseTransaction",
-              "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "transactionID",
-                  "type": "uint256"
-                }
-              ],
-              "stateMutability": "payable",
-              "type": "function"
-            },
-            {
               "inputs": [
                 {
                   "internalType": "address",
-                  "name": "transaction",
+                  "name": "participant",
                   "type": "address"
                 }
               ],
-              "name": "removeTeaTransaction",
-              "outputs": [
-                {
-                  "internalType": "bool",
-                  "name": "success",
-                  "type": "bool"
-                }
-              ],
+              "name": "removeTransaction",
+              "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
             },
@@ -64,6 +72,25 @@
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "from",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "transactionId",
+                  "type": "uint256"
+                }
+              ],
+              "name": "TransactionCreated",
+              "type": "event"
             },
             {
               "inputs": [
@@ -79,21 +106,58 @@
               "type": "function"
             },
             {
-              "inputs": [],
-              "name": "withdraw",
-              "outputs": [
+              "inputs": [
                 {
-                  "internalType": "bool",
-                  "name": "success",
-                  "type": "bool"
+                  "internalType": "uint256",
+                  "name": "amount",
+                  "type": "uint256"
                 }
               ],
+              "name": "withdraw",
+              "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
             },
             {
               "inputs": [],
-              "name": "getTeaTransactionByAddress",
+              "name": "getHolders",
+              "outputs": [
+                {
+                  "internalType": "address[]",
+                  "name": "",
+                  "type": "address[]"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "getTeaPartyTransactions",
+              "outputs": [
+                {
+                  "internalType": "address[]",
+                  "name": "",
+                  "type": "address[]"
+                },
+                {
+                  "internalType": "uint256[]",
+                  "name": "",
+                  "type": "uint256[]"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "participant",
+                  "type": "address"
+                }
+              ],
+              "name": "getTransaction",
               "outputs": [
                 {
                   "internalType": "uint256",
@@ -105,14 +169,8 @@
               "type": "function"
             },
             {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "transaction",
-                  "type": "address"
-                }
-              ],
-              "name": "getTeaTransactions",
+              "inputs": [],
+              "name": "openTransactions",
               "outputs": [
                 {
                   "internalType": "uint256",

@@ -30,7 +30,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { getRPCPollTime, Transactor, Web3ModalSetup } from "./helpers";
-import { Home, ExampleUI, Hints, Subgraph, TeaParty} from "./views";
+import { Home, ExampleUI, Hints, Subgraph, TeaParty } from "./views";
 import { useStaticJsonRPC } from "./hooks";
 
 const { ethers } = require("ethers");
@@ -74,7 +74,7 @@ const providers = [
 function App(props) {
   // specify all the chains your app is available on. Eg: ['localhost', 'mainnet', ...otherNetworks ]
   // reference './constants.js' for other networks
-  const networkOptions = [initialNetwork.name, "mineonlium", "goerli"];
+  const networkOptions = [initialNetwork.name, "partychain", "goerli"];
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
@@ -176,8 +176,6 @@ function App(props) {
     mainnetProviderPollingTime,
   );
 
-
-
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
   console.log("🏷 Resolved austingriffith.eth as:", addressFromENS)
@@ -262,7 +260,7 @@ function App(props) {
   const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf("local") !== -1;
 
   return (
-    <div 
+    <div
     // style={{
     //   width: 'auto',
     //   margin: 'auto',
@@ -281,20 +279,19 @@ function App(props) {
       {/* ✏️ Edit the header and change the title to your project name */}
       <Header>
         <div>
-            <Account
-              useBurner={USE_BURNER_WALLET}
-              address={address}
-              localProvider={localProvider}
-              userSigner={userSigner}
-              mainnetProvider={mainnetProvider}
-              price={price}
-              web3Modal={web3Modal}
-              loadWeb3Modal={loadWeb3Modal}
-              logoutOfWeb3Modal={logoutOfWeb3Modal}
-              blockExplorer={blockExplorer}
-            />
-          </div>
-
+          <Account
+            useBurner={USE_BURNER_WALLET}
+            address={address}
+            localProvider={localProvider}
+            userSigner={userSigner}
+            mainnetProvider={mainnetProvider}
+            price={price}
+            web3Modal={web3Modal}
+            loadWeb3Modal={loadWeb3Modal}
+            logoutOfWeb3Modal={logoutOfWeb3Modal}
+            blockExplorer={blockExplorer}
+          />
+        </div>
       </Header>
       <Switch>
         <Route exact path="/">
@@ -310,7 +307,7 @@ function App(props) {
             writeContracts={writeContracts}
             readContracts={readContracts}
           />
-            {/* <ExampleUI
+          {/* <ExampleUI
             address={address}
             userSigner={userSigner}
             mainnetProvider={mainnetProvider}
@@ -338,7 +335,6 @@ function App(props) {
             contractConfig={contractConfig}
           />
         </Route>
-
       </Switch>
 
       <ThemeSwitch />
