@@ -39,7 +39,7 @@ export default function ExampleUI({
         <Button
               onClick={async () => {
                 const result = tx(
-                  writeContracts.TeaParty.purchaseTransaction({
+                  writeContracts.TeaParty.createTransaction({
                     value: Web3.utils.toWei("1", "ether"),
                   }),
                   update => {
@@ -47,7 +47,7 @@ export default function ExampleUI({
                     if (update && (update.status === "confirmed" || update.status === 1)) {
                       console.log(" 🍾 Transaction " + update.hash + " finished!");
                       console.log( update.data);
-                      alert(Web3.utils.hexToNumber(update.data));
+                      alert("Transaction confirmed. You may now proceed with your transaction.");
                       console.log(
                         " ⛽️ " +
                           update.gasUsed +

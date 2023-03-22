@@ -107,7 +107,7 @@ export default function TeaParty({
 
   const purchaseTransaction = async () => {
     const result = tx(
-      writeContracts.TeaParty.purchaseTransaction({
+      writeContracts.TeaParty.createTransaction({
         value: web3.utils.toWei("1", "ether"),
       }),
       update => {
