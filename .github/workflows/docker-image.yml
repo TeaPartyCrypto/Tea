@@ -1,0 +1,43 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-images:
+    name: Build and publish images
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+         node-version: 16
+    - run: npm i yarn -g
+        
+      
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        service_account: 'fucking-admin@mineonlium.iam.gserviceaccount.com'
+        project_id: 'mineonlium'
+        credentials_json: ${{ secrets.GCLOUD_GCR_SERVICEACCOUNT_KEY }}
+        
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: '1.19'
+
+
+    - name: Publish container images to GCR
+      env:
+        KO_DOCKER_REPO: gcr.io/mineonlium
+        KOFLAGS: --jobs=8 --platform=linux/amd64,linux/arm64,linux/ppc64le --push=${{ github.event_name != 'pull_request' }}
+        DIST_DIR: /tmp/dist
+      run: |
+        make image
+

@@ -6,8 +6,6 @@
 The application interface for `TeaParty` 
 </p>
 </p>
-
-
 ## Design / Overview
 
 `TeaParty` consists of two core parts `tea` & `party`, as illustrated by the diagram below. 
@@ -98,6 +96,22 @@ Here are a few things you can currently do with `tea`:
 * View acquired Private Keys.
 * Remove acquired Private Keys from the local filesystem. 
 * Interact with the `TeaParty` smart contract to pay for transaction fees, currently set @ 1 MO/ Transaction. ( **NOTE:** ALL MO Accounts with a balance over 17k have FREE access to Buy and Sell with `TeaParty`) 
+
+
+## Quickstart `tea` 
+
+The quickest way to get going with `tea` is by executing one of the following commands (Only OSX and Linux is supported at the moment and require `git`)
+
+OSX (amd64):
+```
+git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && cd release && open http://localhost:8081 && ./mac 
+```
+
+Linux:
+```
+git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && cd release && xdg-open http://localhost:8081 && ./linux
+```
+
 
 
 ### Start `tea` from a release

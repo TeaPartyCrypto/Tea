@@ -5,8 +5,8 @@ staging:
 	@KO_DATA_PATH=cmd/kodata/ SAAS_ADDRESS="http://34.172.60.163:8080" go run cmd/main.go
 
 prod:
-	@KO_DATA_PATH=cmd/kodata/ SAAS_ADDRESS="https://hpqkqfw0.ngrok.app" go run cmd/main.go
-
+  @KO_DATA_PATH=cmd/kodata/ SAAS_ADDRESS="https://hpqkqfw0.ngrok.app" go run cmd/main.go
+ 
 build:
 	@cd cmd && go mod tidy && go build -o ../../../release/tea main.go
 	@cd ../react-app && yarn && yarn build
