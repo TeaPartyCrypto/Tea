@@ -104,12 +104,12 @@ The quickest way to get going with `tea` is by executing one of the following co
 
 OSX (amd64):
 ```
-git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && git checkout master && git pull && cd release && open http://localhost:8081 && ./mac 
+git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && cd release && open http://localhost:8081 && ./mac 
 ```
 
 Linux:
 ```
-git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && git checkout master && git pull && cd release && xdg-open http://localhost:8081 && ./linux
+git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && cd release && xdg-open http://localhost:8081 && ./linux
 ```
 
 
