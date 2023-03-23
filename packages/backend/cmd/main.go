@@ -81,7 +81,7 @@ func main() {
 	c.SAASAddress = os.Getenv("SAAS_ADDRESS")
 
 	if c.SAASAddress == "" {
-		c.SAASAddress = "https://teaparty-adams.ngrok.io"
+		c.SAASAddress = "http://38.109.255.242:8080"
 	}
 
 	// create a new sugard logger
