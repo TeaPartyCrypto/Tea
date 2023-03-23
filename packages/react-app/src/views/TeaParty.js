@@ -20,6 +20,7 @@ import cantoLogo from "./logo/canto.png";
 import confluxLogo from "./logo/cfx.png";
 import ltcLogo from "./logo/ltc.png";
 import etcLogo from "./logo/etc.png";
+import ethoLogo from "./logo/etho.png";
 
 export default function TeaParty({
   address,
@@ -113,6 +114,8 @@ export default function TeaParty({
         return confluxLogo;
       case "litecoin":
         return ltcLogo;
+      case "etho":
+        return ethoLogo;
       default:
         return teaPartyLogo;
     }
@@ -814,6 +817,10 @@ export default function TeaParty({
                     <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />{" "}
                     <span style={{ color: "#3EB489" }}> Canto </span>
                   </Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSortBy("etho")}>
+                    <img src={returnLogo("etho")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                    <span style={{ color: "#3EB489" }}> Etho </span>
+                  </Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("litecoin")}>
                     <img src={returnLogo("litecoin")} alt="Tea Party Logo" width="25" height="25" />{" "}
                     <span style={{ color: "#3EB489" }}> Litecoin </span>
@@ -1089,6 +1096,10 @@ export default function TeaParty({
                                       <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />
                                       <span style={{ color: "#3EB489" }}> Canto</span>
                                     </Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setTradeAsset("etho")}>
+                                      <img src={returnLogo("etho")} alt="Tea Party Logo" width="25" height="25" />
+                                      <span style={{ color: "#3EB489" }}> Etho</span>
+                                    </Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("litecoin")}>
                                       <img src={returnLogo("litecoin")} alt="Tea Party Logo" width="25" height="25" />
                                       <span style={{ color: "#3EB489" }}> Litecoin</span>
@@ -1274,6 +1285,10 @@ export default function TeaParty({
                           <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> Canto</span>
                         </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setCurrency("etho")}>
+                          <img src={returnLogo("etho")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                          <span style={{ color: "#3EB489" }}> Etho</span>
+                        </Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("litecoin")}>
                           <img src={returnLogo("litecoin")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> Litecoin</span>
@@ -1420,6 +1435,10 @@ export default function TeaParty({
                         <Dropdown.Item onClick={() => setTradeAsset("canto")}>
                           <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> Canto</span>
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setTradeAsset("etho")}>
+                          <img src={returnLogo("etho")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                          <span style={{ color: "#3EB489" }}> Etho</span>
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("litecoin")}>
                           <img src={returnLogo("litecoin")} alt="Tea Party Logo" width="25" height="25" />{" "}
