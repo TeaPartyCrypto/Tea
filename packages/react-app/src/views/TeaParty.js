@@ -15,6 +15,7 @@ import teaPartyLogo from "./logo/teaparty.png";
 import altcoinchainLogo from "./logo/acc.png";
 import usdtLogo from "./logo/usdt.svg";
 import burgerLogo from "./logo/burgler.png";
+import floraLogo from "./logo/flora.png";
 
 export default function TeaParty({
   address,
@@ -98,6 +99,8 @@ export default function TeaParty({
         return altcoinchainLogo;
       case "burger":
         return burgerLogo;
+      case "flora":
+        return floraLogo;
       default:
         return teaPartyLogo;
     }
@@ -784,9 +787,12 @@ export default function TeaParty({
                     <span style={{ color: "#3EB489" }}> Polygon </span>
                   </Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("altcoinchain")}>
-                    {" "}
                     <img src={returnLogo("altcoinchain")} alt="Tea Party Logo" width="25" height="25" />{" "}
                     <span style={{ color: "#3EB489" }}> AltCoinCash </span>
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSortBy("flora")}>
+                    <img src={returnLogo("flora")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                    <span style={{ color: "#3EB489" }}> FloraChain </span>
                   </Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("ethereum")}>
                     <img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" />{" "}
@@ -1031,6 +1037,10 @@ export default function TeaParty({
                                       />
                                       <span style={{ color: "#3EB489" }}> AltCoinCash</span>
                                     </Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setTradeAsset("flora")}>
+                                      <img src={returnLogo("flora")} alt="Tea Party Logo" width="25" height="25" />
+                                      <span style={{ color: "#3EB489" }}> FloraChain</span>
+                                    </Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("ethereum")}>
                                       <img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" />
                                       ./kb
@@ -1174,6 +1184,10 @@ export default function TeaParty({
                           <img src={returnLogo("altcoinchain")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> AltCoinCash</span>
                         </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setCurrency("flora")}>
+                          <img src={returnLogo("flora")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                          <span style={{ color: "#3EB489" }}> FloraChain</span>
+                        </Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("grams")}>
                           <img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> Grams</span>
@@ -1288,6 +1302,10 @@ export default function TeaParty({
                         <Dropdown.Item onClick={() => setTradeAsset("altcoinchain")}>
                           <img src={returnLogo("altcoinchain")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> AltCoinCash</span>
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setTradeAsset("flora")}>
+                          <img src={returnLogo("flora")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                          <span style={{ color: "#3EB489" }}> FloraChain</span>
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("grams")}>
                           <img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" />{" "}
