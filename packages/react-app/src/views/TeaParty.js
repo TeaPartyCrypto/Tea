@@ -20,7 +20,7 @@ import cantoLogo from "./logo/canto.png";
 import confluxLogo from "./logo/cfx.png";
 import ltcLogo from "./logo/ltc.png";
 import etcLogo from "./logo/etc.png";
-import ethoLogo from "./logo/etho.png";
+import ethoLogo from "./logo/etho.jpg";
 
 export default function TeaParty({
   address,
