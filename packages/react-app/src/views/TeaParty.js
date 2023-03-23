@@ -17,6 +17,7 @@ import usdtLogo from "./logo/usdt.svg";
 import burgerLogo from "./logo/burgler.png";
 import floraLogo from "./logo/flora.png";
 import cantoLogo from "./logo/canto.png";
+import confluxLogo from "./logo/cfx.png";
 import etcLogo from "./logo/etc.png";
 
 export default function TeaParty({
@@ -107,6 +108,8 @@ export default function TeaParty({
         return cantoLogo;
       case "ethereumclassic":
         return etcLogo;
+      case "conflux":
+        return confluxLogo;
       default:
         return teaPartyLogo;
     }
@@ -804,6 +807,10 @@ export default function TeaParty({
                     <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />{" "}
                     <span style={{ color: "#3EB489" }}> Canto </span>
                   </Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSortBy("conflux")}>
+                    <img src={returnLogo("conflux")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                    <span style={{ color: "#3EB489" }}> Conflux </span>
+                  </Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("ethereumclassic")}>
                     <img src={returnLogo("ethereumclassic")} alt="Tea Party Logo" width="25" height="25" />{" "}
                     <span style={{ color: "#3EB489" }}> Ethereum Classic </span>
@@ -1059,6 +1066,10 @@ export default function TeaParty({
                                       <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />
                                       <span style={{ color: "#3EB489" }}> Canto</span>
                                     </Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setTradeAsset("conflux")}>
+                                      <img src={returnLogo("conflux")} alt="Tea Party Logo" width="25" height="25" />
+                                      <span style={{ color: "#3EB489" }}> Conflux</span>
+                                    </Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("ethereumclassic")}>
                                       <img
                                         src={returnLogo("ethereumclassic")}
@@ -1219,6 +1230,10 @@ export default function TeaParty({
                           <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> Canto</span>
                         </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setCurrency("conflux")}>
+                          <img src={returnLogo("conflux")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                          <span style={{ color: "#3EB489" }}> Conflux</span>
+                        </Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("ethereumclassic")}>
                           <img src={returnLogo("ethereumclassic")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> Ethereum Classic</span>
@@ -1345,6 +1360,10 @@ export default function TeaParty({
                         <Dropdown.Item onClick={() => setTradeAsset("canto")}>
                           <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> Canto</span>
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setTradeAsset("conflux")}>
+                          <img src={returnLogo("conflux")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                          <span style={{ color: "#3EB489" }}> Conflux</span>
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("ethereumclassic")}>
                           <img src={returnLogo("ethereumclassic")} alt="Tea Party Logo" width="25" height="25" />{" "}
