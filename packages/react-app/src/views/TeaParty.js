@@ -12,6 +12,7 @@ import polygonLogo from "./logo/matic.png";
 import rxdLogo from "./logo/rxd.png";
 import solLogo from "./logo/sol.png";
 import teaPartyLogo from "./logo/teaparty.png";
+import altcoinchainLogo from "./logo/acc.png";
 import usdtLogo from "./logo/usdt.svg";
 import burgerLogo from "./logo/burgler.png";
 
@@ -94,7 +95,7 @@ export default function TeaParty({
       case "bscUSDT":
         return usdtLogo;
       case "altcoinchain":
-        return teaPartyLogo;
+        return altcoinchainLogo;
       case "burger":
         return burgerLogo;
       default:
@@ -785,7 +786,7 @@ export default function TeaParty({
                   <Dropdown.Item onClick={() => setSortBy("altcoinchain")}>
                     {" "}
                     <img src={returnLogo("altcoinchain")} alt="Tea Party Logo" width="25" height="25" />{" "}
-                    <span style={{ color: "#3EB489" }}> AltCoinChain </span>
+                    <span style={{ color: "#3EB489" }}> AltCoinCash </span>
                   </Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("ethereum")}>
                     <img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" />{" "}
@@ -1028,10 +1029,11 @@ export default function TeaParty({
                                         width="25"
                                         height="25"
                                       />
-                                      <span style={{ color: "#3EB489" }}> AltCoinChain</span>
+                                      <span style={{ color: "#3EB489" }}> AltCoinCash</span>
                                     </Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("ethereum")}>
                                       <img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" />
+                                      ./kb
                                       <span style={{ color: "#3EB489" }}> Ethereum</span>
                                     </Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("grams")}>
@@ -1170,7 +1172,7 @@ export default function TeaParty({
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("altcoinchain")}>
                           <img src={returnLogo("altcoinchain")} alt="Tea Party Logo" width="25" height="25" />{" "}
-                          <span style={{ color: "#3EB489" }}> AltCoinChain</span>
+                          <span style={{ color: "#3EB489" }}> AltCoinCash</span>
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("grams")}>
                           <img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" />{" "}
@@ -1285,7 +1287,7 @@ export default function TeaParty({
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("altcoinchain")}>
                           <img src={returnLogo("altcoinchain")} alt="Tea Party Logo" width="25" height="25" />{" "}
-                          <span style={{ color: "#3EB489" }}> AltCoinChain</span>
+                          <span style={{ color: "#3EB489" }}> AltCoinCash</span>
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("grams")}>
                           <img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" />{" "}
