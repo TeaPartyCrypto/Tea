@@ -17,6 +17,7 @@ import usdtLogo from "./logo/usdt.svg";
 import burgerLogo from "./logo/burgler.png";
 import floraLogo from "./logo/flora.png";
 import cantoLogo from "./logo/canto.png";
+import etcLogo from "./logo/etc.png";
 
 export default function TeaParty({
   address,
@@ -104,6 +105,8 @@ export default function TeaParty({
         return floraLogo;
       case "canto":
         return cantoLogo;
+      case "ethereumclassic":
+        return etcLogo;
       default:
         return teaPartyLogo;
     }
@@ -801,6 +804,10 @@ export default function TeaParty({
                     <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />{" "}
                     <span style={{ color: "#3EB489" }}> Canto </span>
                   </Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSortBy("ethereumclassic")}>
+                    <img src={returnLogo("ethereumclassic")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                    <span style={{ color: "#3EB489" }}> Ethereum Classic </span>
+                  </Dropdown.Item>
                   <Dropdown.Item onClick={() => setSortBy("ethereum")}>
                     <img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" />{" "}
                     <span style={{ color: "#3EB489" }}> Ethereum</span>{" "}
@@ -1052,6 +1059,15 @@ export default function TeaParty({
                                       <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />
                                       <span style={{ color: "#3EB489" }}> Canto</span>
                                     </Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setTradeAsset("ethereumclassic")}>
+                                      <img
+                                        src={returnLogo("ethereumclassic")}
+                                        alt="Tea Party Logo"
+                                        width="25"
+                                        height="25"
+                                      />
+                                      <span style={{ color: "#3EB489" }}> Ethereum Classic</span>
+                                    </Dropdown.Item>
                                     <Dropdown.Item onClick={() => setTradeAsset("ethereum")}>
                                       <img src={returnLogo("ethereum")} alt="Tea Party Logo" width="25" height="25" />
                                       ./kb
@@ -1203,6 +1219,10 @@ export default function TeaParty({
                           <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> Canto</span>
                         </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setCurrency("ethereumclassic")}>
+                          <img src={returnLogo("ethereumclassic")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                          <span style={{ color: "#3EB489" }}> Ethereum Classic</span>
+                        </Dropdown.Item>
                         <Dropdown.Item onClick={() => setCurrency("grams")}>
                           <img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> Grams</span>
@@ -1325,6 +1345,10 @@ export default function TeaParty({
                         <Dropdown.Item onClick={() => setTradeAsset("canto")}>
                           <img src={returnLogo("canto")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> Canto</span>
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setTradeAsset("ethereumclassic")}>
+                          <img src={returnLogo("ethereumclassic")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                          <span style={{ color: "#3EB489" }}> Ethereum Classic</span>
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => setTradeAsset("grams")}>
                           <img src={returnLogo("grams")} alt="Tea Party Logo" width="25" height="25" />{" "}

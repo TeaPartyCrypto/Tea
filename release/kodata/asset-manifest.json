@@ -19,8 +19,8 @@
     "static/js/8.db399be4.chunk.js": "./static/js/8.db399be4.chunk.js",
     "static/js/8.db399be4.chunk.js.map": "./static/js/8.db399be4.chunk.js.map",
     "main.css": "./static/css/main.cf589116.chunk.css",
-    "main.js": "./static/js/main.6822e48b.chunk.js",
-    "main.js.map": "./static/js/main.6822e48b.chunk.js.map",
+    "main.js": "./static/js/main.14ce3ca3.chunk.js",
+    "main.js.map": "./static/js/main.14ce3ca3.chunk.js.map",
     "runtime-main.js": "./static/js/runtime-main.a2de6411.js",
     "runtime-main.js.map": "./static/js/runtime-main.a2de6411.js.map",
     "static/css/11.f457ab38.chunk.css": "./static/css/11.f457ab38.chunk.css",
@@ -64,6 +64,7 @@
     "static/js/11.181e0c09.chunk.js.LICENSE.txt": "./static/js/11.181e0c09.chunk.js.LICENSE.txt",
     "static/media/acc.792dbb9a.png": "./static/media/acc.792dbb9a.png",
     "static/media/btc.9bc86613.png": "./static/media/btc.9bc86613.png",
+    "static/media/etc.6398a467.png": "./static/media/etc.6398a467.png",
     "static/media/eth.a85b6de0.png": "./static/media/eth.a85b6de0.png",
     "static/media/flora.33d9f49f.png": "./static/media/flora.33d9f49f.png",
     "static/media/matic.534d7899.png": "./static/media/matic.534d7899.png",
@@ -78,6 +79,6 @@
     "static/css/11.f457ab38.chunk.css",
     "static/js/11.181e0c09.chunk.js",
     "static/css/main.cf589116.chunk.css",
-    "static/js/main.6822e48b.chunk.js"
+    "static/js/main.14ce3ca3.chunk.js"
   ]
 }
