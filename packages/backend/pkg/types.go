@@ -37,11 +37,11 @@ type SellOrder struct {
 	// TradeAsset reflects the asset that the SELLER wishes to obtain. (bitcoin, mineonlium, USDT, etc).
 	TradeAsset string `json:"tradeAsset"`
 	// Price reflects the ammount of TradeAsset the SELLER requires.
-	Price int `json:"price"`
+	Price *big.Int `json:"price"`
 	// Currency reflects the currency that the SELLER wishes to trade. (bitcoin, mineonlium, USDT, etc).
 	Currency string `json:"currency"`
 	// Amount reflects the ammount of Currency the SELLER wishes to trade.
-	Amount int `json:"amount"`
+	Amount *big.Int `json:"amount"`
 	// TXID reflects the Transaction ID of the SELL order to be created.
 	TXID string `json:"txid"`
 	// Locked tells us if this transaction is pending/proccessing another payment.
@@ -63,6 +63,8 @@ type SellOrder struct {
 	Assisted bool `json:"assisted"`
 	// AssistedTradeOrderInformation reflects the information required to assist the trade order.
 	AssistedTradeOrderInformation AssistedTradeOrderInformation `json:"assistedTradeOrderInformation"`
+	// NFTID reflects the NFT ID of the NFT that is being traded.
+	NFTID int64 `json:"nftID"`
 }
 
 type AssistedTradeOrderInformation struct {

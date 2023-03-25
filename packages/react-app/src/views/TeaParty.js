@@ -21,6 +21,7 @@ import confluxLogo from "./logo/cfx.png";
 import ltcLogo from "./logo/ltc.png";
 import etcLogo from "./logo/etc.png";
 import ethoLogo from "./logo/etho.jpg";
+import miningGameLogo from "./logo/watt.png";
 
 export default function TeaParty({
   address,
@@ -39,6 +40,7 @@ export default function TeaParty({
 
   const [tradeAsset, setTradeAsset] = useState("grams");
   const [amount, setAmount] = useState("1.2");
+  const [nftID, setNftID] = useState(1);
   const [currency, setCurrency] = useState("polygon");
   const [price, setPrice] = useState("1.5");
   const [txid, setTxid] = useState("");
@@ -116,6 +118,8 @@ export default function TeaParty({
         return ltcLogo;
       case "etho":
         return ethoLogo;
+      case "miningGame":
+        return miningGameLogo;
       default:
         return teaPartyLogo;
     }
@@ -290,7 +294,7 @@ export default function TeaParty({
   //   axios.post('/fetchopenorderbynkn', {
   //     nknAddress: myNKNAddress
   //   })
-  //     .then((response) => {
+  //     .then((response) => {miningGame
 
   //       console.log(response.data);
   //       setuserCurrentPendingPayOrders(response.data);
@@ -336,7 +340,11 @@ export default function TeaParty({
     // convert the amount and price into wei
     const amt = parseInt(web3.utils.toWei(amount, "ether"));
     const prc = parseInt(web3.utils.toWei(price, "ether"));
-
+    // convert nftID to int
+    var nftIDint = parseInt(nftID);
+    if (nftIDint == NaN) {
+      nftIDint = 0;
+    }
     axios
       .post("/sell", {
         tradeAsset: tradeAsset,
@@ -349,6 +357,7 @@ export default function TeaParty({
         paymentTransactionID: address,
         refundAddress: sellersRefundAddress,
         private: privateSell,
+        nftID: nftIDint,
       })
       .then(response => {
         console.log(response.data);
@@ -867,6 +876,10 @@ export default function TeaParty({
                     <img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" />{" "}
                     <span style={{ color: "#3EB489" }}> BSC-USDT</span>
                   </Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSortBy("miningGame")}>
+                    <img src={returnLogo("miningGame")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                    <span style={{ color: "#3EB489" }}> MiningGame NFT</span>
+                  </Dropdown.Item>
                   <Dropdown.Item onClick={() => show("private") & setSortBy("none")}>
                     <img src={returnLogo("tp")} alt="Tea Party Logo" width="25" height="25" />{" "}
                     <span style={{ color: "#3EB489" }}> Private</span>
@@ -981,6 +994,12 @@ export default function TeaParty({
                                           width="25"
                                           height="25"
                                         />
+                                        {/* if the order is for a NFT (mining game) then show the NFT ID */}
+                                        {order.currency === "miningGame" ? (
+                                          <span> NFT ID: {order.nftID}</span>
+                                        ) : (
+                                          <span> </span>
+                                        )}
                                         {/* {"  " + order.currency} */}
                                       </span>
                                     </div>
@@ -1148,6 +1167,10 @@ export default function TeaParty({
                                     <Dropdown.Item onClick={() => setTradeAsset("solana")}>
                                       <img src={returnLogo("solana")} alt="Tea Party Logo" width="25" height="25" />
                                       <span style={{ color: "#3EB489" }}> Solana</span>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setTradeAsset("miningGame")}>
+                                      <img src={returnLogo("miningGame")} alt="Tea Party Logo" width="25" height="25" />
+                                      <span style={{ color: "#3EB489" }}> MiningGame NFT</span>
                                     </Dropdown.Item>
                                   </Dropdown.Menu>
                                 </Dropdown>
@@ -1331,6 +1354,10 @@ export default function TeaParty({
                           <img src={returnLogo("bscUSDT")} alt="Tea Party Logo" width="25" height="25" />{" "}
                           <span style={{ color: "#3EB489" }}> BSC-USDT</span>
                         </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setCurrency("miningGame")}>
+                          <img src={returnLogo("miningGame")} alt="Tea Party Logo" width="25" height="25" />{" "}
+                          <span style={{ color: "#3EB489" }}> MiningGame NFT</span>
+                        </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
                   </Col>
@@ -1338,37 +1365,78 @@ export default function TeaParty({
               </Form.Group>
               <Form.Group controlId="formListAmount">
                 <Row>
-                  <Col
-                    style={{
-                      marginTop: "1rem",
-                      marginBottom: "1rem",
-                      boarder: "dark",
-                      padding: "1rem",
-                      width: "auto",
-                      textAlign: "right",
-                      margin: "auto",
-                    }}
-                  >
-                    <Form.Label>Amount</Form.Label>
-                  </Col>
-                  <Col
-                    style={{
-                      marginTop: "1rem",
-                      marginBottom: "1rem",
-                      boarder: "dark",
-                      padding: "1rem",
-                      width: "auto",
-                      textAlign: "left",
-                      margin: "auto",
-                    }}
-                  >
-                    <Form.Control
-                      style={{ background: "#023020", color: "#3EB489" }}
-                      type="text"
-                      placeholder=""
-                      onChange={e => setAmount(e.target.value)}
-                    />
-                  </Col>
+                  {/* If the currency is miningGame, show the NFT ID field. else show the amount field */}
+                  {currency === "miningGame" ? (
+                    <div>
+                      <Col
+                        style={{
+                          marginTop: "1rem",
+                          marginBottom: "1rem",
+                          boarder: "dark",
+                          padding: "1rem",
+                          width: "auto",
+                          textAlign: "right",
+                          margin: "auto",
+                        }}
+                      >
+                        <Form.Label>NFT ID</Form.Label>
+                      </Col>
+                      <Col
+                        style={{
+                          marginTop: "1rem",
+                          marginBottom: "1rem",
+                          boarder: "dark",
+                          padding: "1rem",
+                          width: "auto",
+                          textAlign: "left",
+                          margin: "auto",
+                        }}
+                      >
+                        <Form.Control
+                          type="text"
+                          placeholder="NFT ID"
+                          value={nftID}
+                          style={{ background: "#023020", color: "#3EB489" }}
+                          onChange={e => setNftID(e.target.value)}
+                        />
+                      </Col>
+                    </div>
+                  ) : (
+                    <div>
+                      <Col
+                        style={{
+                          marginTop: "1rem",
+                          marginBottom: "1rem",
+                          boarder: "dark",
+                          padding: "1rem",
+                          width: "auto",
+                          textAlign: "right",
+                          margin: "auto",
+                        }}
+                      >
+                        <Form.Label>Amount</Form.Label>
+                      </Col>
+                      <Col
+                        style={{
+                          marginTop: "1rem",
+                          marginBottom: "1rem",
+                          boarder: "dark",
+                          padding: "1rem",
+                          width: "auto",
+                          textAlign: "left",
+                          margin: "auto",
+                        }}
+                      >
+                        <Form.Control
+                          type="text"
+                          placeholder="Amount"
+                          style={{ background: "#023020", color: "#3EB489" }}
+                          value={amount}
+                          onChange={e => setAmount(e.target.value)}
+                        />
+                      </Col>
+                    </div>
+                  )}
                 </Row>
               </Form.Group>
               <Form.Group controlId="formListAmount">
