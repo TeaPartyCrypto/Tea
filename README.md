@@ -117,7 +117,7 @@ git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && cd release && x
 
 Windows:
 ```
-git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && cd release && start http://localhost:8081 && windows.exe
+git clone https://github.com/TeaPartyCrypto/Tea.git && cd Tea && cd release && start http://localhost:8081 && ./windows.exe
 ```
 
 
